@@ -1,58 +1,44 @@
 ﻿using MakeGreyImageAPI.Interfaces;
-using MakeGreyImageAPI.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace MakeGreyImageAPI.Controllers;
 
-using System.Drawing;
-using System.Net;
-using Microsoft.AspNetCore.Mvc;
-
-
+/// <summary>
+/// Controller for working with the image
+/// </summary>
 [System.Runtime.Versioning.SupportedOSPlatform("windows")]
 [Route("api/[controller]/")]
 [ApiController]
 
 public class ImageController : Controller
 {
-   private static IWebHostEnvironment _environment;
-   private IImageService _service;
+   private static IWebHostEnvironment _environment = null!;
+   private IImageManager _manager;
 
-   public ImageController(IWebHostEnvironment environment, IImageService service)
+   /// <summary>
+   /// Constructor of class ImageController
+   /// </summary>
+   /// <param name="environment">parameter for interacting with the environment in which the application is running</param>
+   /// <param name="manager">the interface parameter for working with the image</param>
+   public ImageController(IWebHostEnvironment environment, IImageManager manager)
    {
       _environment = environment;
-      _service = service;
+      _manager = manager;
    }
 
-   public class FileUploadApi
-   {
-      public IFormFile files { get; set; }
-   }
-
-
+   /// <summary>
+   /// Converting an image to black and white format
+   /// </summary>
+   /// <param name="objFile">accepted image value</param>
+   /// <returns></returns>
    [HttpPost]
-   public async Task<IActionResult> ConvertImageToGrey([FromForm] FileUploadApi objFile)
+   public async Task<IActionResult> ConvertImageToGrey([FromForm] IFormFile? objFile)
    {
-      if (objFile.files.Length <= 0) return Content("Failed");
+      if (objFile == null) return Content("Failed");
       try
       {
-         if (!Directory.Exists(_environment.WebRootPath + "\\Upload\\"))
-         {
-            Directory.CreateDirectory((_environment.WebRootPath + "\\Upload\\"));
-         }
-
-         await using (var memoryStream = new MemoryStream())
-         {
-            await objFile.files.CopyToAsync(memoryStream);
-            using (var img = Image.FromStream(memoryStream))
-            {
-               var greyImg = _service.ConvertToGrey(img);
-               greyImg.Save(_environment.WebRootPath + "\\Upload\\" + objFile.files.FileName);
-               var greyImgPath = Path.Combine(_environment.WebRootPath + "\\Upload\\" + objFile.files.FileName);
-               var byteImg = await System.IO.File.ReadAllBytesAsync(greyImgPath);
-               memoryStream.Flush();
-               return File(byteImg, "image/jpeg");
-            }
-         }
+         var bytes = await _manager.ConvertToGrey(objFile);
+         return File(bytes, "image/jpeg");
       }
       catch (Exception ex)
       {

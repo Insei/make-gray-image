@@ -1,20 +1,9 @@
-using MakeGreyImageAPI.Controllers;
 using MakeGreyImageAPI.Interfaces;
-using MakeGreyImageAPI.Services;
+using MakeGreyImageAPI.Managers;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// builder.Services.AddControllers();
-
-#pragma warning disable CA1416
-builder.Services.AddScoped<IImageService, ImageService>();
-#pragma warning restore CA1416
-
-// #pragma warning disable CA1416
-// builder.Services.AddScoped<ImageController>();
-// #pragma warning restore CA1416
-
+builder.Services.AddScoped<IImageManager, ImageManager>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
@@ -31,7 +20,6 @@ builder.Services.AddCors(options =>
 });
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
