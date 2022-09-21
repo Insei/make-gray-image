@@ -1,4 +1,8 @@
-﻿using MakeGreyImageAPI.Interfaces;
+﻿using System;
+using System.Threading.Tasks;
+using MakeGreyImageAPI.Interfaces;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MakeGreyImageAPI.Controllers;
