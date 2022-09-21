@@ -7,6 +7,8 @@ builder.Services.AddScoped<IImageManager, ImageManager>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
+//it is necessary for requests from the host locale,
+//to work without a signed certificate, and we allow the use of any HTTP methods and hiders
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("DevCorsPolicy", corsBuilder =>
