@@ -1,4 +1,7 @@
-﻿namespace MakeGreyImageAPI.Interfaces;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+
+namespace MakeGreyImageAPI.Interfaces;
 
 /// <summary>
 ///  interface of methods for working with images
