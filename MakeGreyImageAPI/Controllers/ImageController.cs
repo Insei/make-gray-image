@@ -42,7 +42,7 @@ public class ImageController : Controller
       try
       {
          var bytes = await _manager.ConvertToGrey(objFile);
-         return File(bytes, "image/jpeg");
+         return File(bytes, $"image/{objFile.FileName.Substring(objFile.FileName.LastIndexOf('.') + 1)}");
       }
       catch (Exception ex)
       {
