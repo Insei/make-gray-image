@@ -37,8 +37,9 @@ public class ImageManager : IImageManager
                     r = g = b = (r + g + b) / 3.0f;
                     var newPixel = 0xFF000000 | ((uint)r << 16) | ((uint)g << 8) | (uint)b;
                     greyImg.SetPixel(i, j, Color.FromArgb((int)newPixel));
-                } 
-                greyImg.Save(memoryStream, ImageFormat.Jpeg);
+                }
+                memoryStream.SetLength(0);
+                greyImg.Save(memoryStream, ImageFormat.Png.Equals(greyImg.RawFormat) ? ImageFormat.Png : ImageFormat.Jpeg);
                 return memoryStream.ToArray();
             }
         }

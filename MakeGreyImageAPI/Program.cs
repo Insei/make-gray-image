@@ -1,10 +1,8 @@
 using MakeGreyImageAPI.Interfaces;
 using MakeGreyImageAPI.Managers;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
+
 
 builder.Services.AddScoped<IImageManager, ImageManager>();
 builder.Services.AddControllers();
