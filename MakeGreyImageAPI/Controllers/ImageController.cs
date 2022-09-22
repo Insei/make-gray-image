@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing.Imaging;
 using System.Threading.Tasks;
 using MakeGreyImageAPI.Interfaces;
 using Microsoft.AspNetCore.Hosting;
@@ -17,7 +18,7 @@ namespace MakeGreyImageAPI.Controllers;
 public class ImageController : Controller
 {
    private static IWebHostEnvironment _environment = null!;
-   private IImageManager _manager;
+   private readonly IImageManager _manager;
 
    /// <summary>
    /// Constructor of class ImageController
@@ -42,7 +43,11 @@ public class ImageController : Controller
       try
       {
          var bytes = await _manager.ConvertToGrey(objFile);
-         return File(bytes, $"image/{objFile.FileName.Substring(objFile.FileName.LastIndexOf('.') + 1)}");
+         if (objFile.Name.ToLower().Contains("jpeg") || objFile.Name.ToLower().Contains("jpg"))
+         {
+            return File(bytes, "image/jpeg");
+         }
+         return File(bytes, "image/png");
       }
       catch (Exception ex)
       {
