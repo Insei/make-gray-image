@@ -36,7 +36,7 @@ public class ImageController : Controller
    /// </summary>
    /// <param name="objFile">accepted image value</param>
    /// <returns></returns>
-   [HttpPost]
+   [HttpPost("convert")]
    public async Task<IActionResult> ConvertImageToGrey([FromForm] IFormFile? objFile)
    {
       if (objFile == null) return Content("Failed");
