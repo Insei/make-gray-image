@@ -22,6 +22,8 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="AutoMapper" Version="11.0.1" />
+        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.9" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.9" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.9" />
@@ -34,6 +36,10 @@
     <ItemGroup>
       <Folder Include="wwwroot" />
       <Folder Include="wwwroot\Upload" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\MakeGreyImageAPI.DTOs\MakeGreyImageAPI.DTOs.csproj" />
     </ItemGroup>
 
 </Project>
