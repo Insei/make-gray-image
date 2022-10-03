@@ -6,12 +6,7 @@ public class LocalImageBaseDTO
     /// Image name
     /// </summary>
     public string Name { get; set; } = null!;
-
-    /// <summary>
-    /// Image in byte format
-    /// </summary>
-    public byte[]? Image { get; set; }
-
+    
     /// <summary>
     /// Image extension
     /// </summary>
