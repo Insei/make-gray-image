@@ -3,7 +3,7 @@ namespace MakeGreyImageAPI.Entities;
 /// <summary>
 /// 
 /// </summary>
-public class ImageConvertTask
+public class ConversationTaskImage
 {
     /// <summary>
     /// 
