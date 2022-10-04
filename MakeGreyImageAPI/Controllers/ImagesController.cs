@@ -23,7 +23,7 @@ public class ImagesController : Controller
     /// </summary>
     /// <param name="environment">parameter for interacting with the environment in which the application is running</param>
     /// <param name="service"></param>
-    public LocalImageController(IWebHostEnvironment environment, ImageService service)
+    public ImagesController(IWebHostEnvironment environment, ImageService service)
     {
         _environment = environment;
         _service = service;
@@ -66,7 +66,7 @@ public class ImagesController : Controller
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpGet("{id}")]
-    public async Task<ApiResponse<LocalImageDTO>> GetById([FromForm]Guid id)
+    public async Task<ApiResponse<LocalImageDTO>> GetById(Guid id)
     {
         var image = await _service.GetById(id)!;
         var response = new ApiResponse<LocalImageDTO>()
@@ -124,5 +124,32 @@ public class ImagesController : Controller
             Data = await _service.GetList(search)
         };
         return response;
+    }
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    [HttpGet("download/{id}")]
+    public async Task<IActionResult> Download(Guid id)
+    {
+        var imageExtension = _service.GetById(id)?.Result.Extension;
+        if (imageExtension == null) return Content("Failed");
+        try
+        {
+            var byteImage = await _service.GetByteFormat(id);
+            if (imageExtension.ToLower().Contains("jpeg") || imageExtension.ToLower().Contains("jpg"))
+            {
+                if (byteImage != null) return File(byteImage, "image/jpeg");
+            }
+
+            if (byteImage != null) return File(byteImage, "image/png");
+        }
+        catch (Exception ex)
+        {
+            return Content(ex.Message);
+        }
+        throw new InvalidOperationException();
     }
 }
