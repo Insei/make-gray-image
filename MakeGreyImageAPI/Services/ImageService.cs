@@ -129,4 +129,14 @@ public class ImageService
             return Task.FromResult(img);
         }
     }
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    public async Task<byte[]?> GetByteFormat(Guid id)
+    {
+        var image = await _repository.GetById<LocalImage>(id);
+        return image?.Image;
+    }
 }
