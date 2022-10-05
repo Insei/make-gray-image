@@ -1,7 +1,7 @@
 namespace MakeGreyImageAPI.DTOs;
 
-public class ConversationTaskImageCreateDTO
+public class LocalImageConvertTaskCreateDTO
 {
-    private Guid ImageId { get; set; }
+    public Guid ImageId { get; set; }
     public ConvertParameters Parameters { get; set; }
 }
