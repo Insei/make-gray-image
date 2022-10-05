@@ -2,6 +2,7 @@
 using System.Drawing.Imaging;
 using System.IO;
 using System.Threading.Tasks;
+using MakeGreyImageAPI.Entities;
 using MakeGreyImageAPI.Interfaces;
 using Microsoft.AspNetCore.Http;
 
@@ -18,14 +19,14 @@ public class ImageManager : IImageManager
     /// <param name="image">parameter of the received image</param>
     /// <returns>Return image in byte array format</returns>
     [System.Runtime.Versioning.SupportedOSPlatform("windows")]
-    public async Task<byte[]> ConvertToGrey(IFormFile image) 
+    public async Task<byte[]> ConvertToGrey(LocalImage image) 
     { 
-        await using (var memoryStream = new MemoryStream())
+        await using (var memoryStream = new MemoryStream(image.Image!))
         {
-            await image.CopyToAsync(memoryStream);
-            using (var img = Image.FromStream(memoryStream))
+            // await image.CopyToAsync(memoryStream);
+            using (var bmpImg = (Bitmap)Image.FromStream(memoryStream))
             {
-                var bmpImg = (Bitmap)img;
+                // var bmpImg = (Bitmap)img;
                 var greyImg = new Bitmap(bmpImg.Width, bmpImg.Height);
                 for (int j = 0; j < bmpImg.Height; j++)
                 for (int i = 0; i < bmpImg.Width; i++)

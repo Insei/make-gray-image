@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using MakeGreyImageAPI.Entities;
 
 namespace MakeGreyImageAPI.Interfaces;
 
@@ -13,5 +12,5 @@ public interface IImageManager
     /// </summary>
     /// <param name="image">parameter of the received image</param>
     /// <returns>Return image in byte array format</returns>
-    public Task<byte[]> ConvertToGrey(IFormFile image);
+    public Task<byte[]> ConvertToGrey(LocalImage image);
 }
