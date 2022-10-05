@@ -14,16 +14,18 @@ public class ImageService
     
     private readonly IGenericRepository _repository;
     private readonly IMapper _mapper;
-
+    private readonly IImageManager _manager;
     /// <summary>
     /// 
     /// </summary>
     /// <param name="repository"></param>
     /// <param name="mapper"></param>
-    public ImageService(IGenericRepository repository, IMapper mapper)
+    /// <param name="manager"></param>
+    public ImageService(IGenericRepository repository, IMapper mapper, IImageManager manager)
     {
         _repository = repository;
         _mapper = mapper;
+        _manager = manager;
 
     }
 
@@ -134,7 +136,7 @@ public class ImageService
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    public async Task<byte[]?> GetByteFormat(Guid id)
+    public async Task<byte[]?> GetImageByte(Guid id)
     {
         var image = await _repository.GetById<LocalImage>(id);
         return image?.Image;
