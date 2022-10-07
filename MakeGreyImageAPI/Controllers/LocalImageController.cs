@@ -1,13 +1,11 @@
 using MakeGreyImageAPI.DTOs;
-using MakeGreyImageAPI.Entities;
-using MakeGreyImageAPI.Interfaces;
 using MakeGreyImageAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MakeGreyImageAPI.Controllers;
 
 /// <summary>
-/// 
+/// Controller for working with original images
 /// </summary>
 [System.Runtime.Versioning.SupportedOSPlatform("windows")]
 [Route("api/images/")]
@@ -15,25 +13,22 @@ namespace MakeGreyImageAPI.Controllers;
 
 public class LocalImageController : Controller
 {
-    private static IWebHostEnvironment _environment = null!;
     private static ImageService _service = null!;
 
     /// <summary>
     /// Constructor of class LocalImageController
     /// </summary>
-    /// <param name="environment">parameter for interacting with the environment in which the application is running</param>
-    /// <param name="service"></param>
-    public LocalImageController(IWebHostEnvironment environment, ImageService service)
+    /// <param name="service">ImageService class</param>
+    public LocalImageController(ImageService service)
     {
-        _environment = environment;
         _service = service;
     }
     
     /// <summary>
-    /// 
+    /// Http request to add data to DB
     /// </summary>
-    /// <param name="objFile"></param>
-    /// <returns></returns>
+    /// <param name="objFile">accepted file</param>
+    /// <returns>image information</returns>
     [HttpPost("add")]
     public async Task<ApiResponse<LocalImageDTO>> Add([FromForm] IFormFile? objFile)
     {
@@ -61,10 +56,10 @@ public class LocalImageController : Controller
        }
     }
     /// <summary>
-    /// 
+    /// Http request to get an entity by Id
     /// </summary>
-    /// <param name="id"></param>
-    /// <returns></returns>
+    /// <param name="id">entity ID</param>
+    /// <returns>Image entity</returns>
     [HttpGet("{id}")]
     public async Task<ApiResponse<LocalImageDTO>> GetById(Guid id)
     {
@@ -77,9 +72,9 @@ public class LocalImageController : Controller
     }
     
     /// <summary>
-    /// 
+    /// Http request to remove an entity from DB
     /// </summary>
-    /// <param name="id"></param>
+    /// <param name="id">entity ID</param>
     [HttpDelete("{id}")]
     public async Task<EmptyApiResponse> Delete([FromQuery]Guid id)
     {
@@ -95,11 +90,11 @@ public class LocalImageController : Controller
     }
     
     /// <summary>
-    /// 
+    /// Http request to update entity data
     /// </summary>
-    /// <param name="updateImage"></param>
-    /// <param name="id"></param>
-    /// <returns></returns>
+    /// <param name="updateImage">entity with changes</param>
+    /// <param name="id">entity ID</param>
+    /// <returns>updated entity</returns>
     [HttpPut("{id}")]
     public async Task<ApiResponse<LocalImageDTO>> Update(LocalImageUpdateDTO updateImage, Guid id)
     {
@@ -112,10 +107,10 @@ public class LocalImageController : Controller
     
   
     /// <summary>
-    /// 
+    /// Http request to get the list of entities
     /// </summary>
-    /// <param name="search"></param>
-    /// <returns></returns>
+    /// <param name="search">parameter for searching from entities</param>
+    /// <returns>list of entities</returns>
     [HttpGet("list")]
     public async Task<ApiResponse<List<LocalImageDTO>>> GetList([FromQuery]string search)
     {
@@ -127,10 +122,10 @@ public class LocalImageController : Controller
     }
     
     /// <summary>
-    /// 
+    /// Http request to download entity
     /// </summary>
-    /// <param name="id"></param>
-    /// <returns></returns>
+    /// <param name="id">entity ID</param>
+    /// <returns>image entity</returns>
     [HttpGet("{id}/download")]
     public async Task<IActionResult> Download(Guid id)
     {
