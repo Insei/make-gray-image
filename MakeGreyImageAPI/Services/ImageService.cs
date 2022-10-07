@@ -7,7 +7,7 @@ using MakeGreyImageAPI.Interfaces;
 namespace MakeGreyImageAPI.Services;
 
 /// <summary>
-/// 
+/// Service for working with images
 /// </summary>
 public class ImageService
 {
@@ -16,11 +16,11 @@ public class ImageService
     private readonly IMapper _mapper;
     private readonly IImageManager _manager;
     /// <summary>
-    /// 
+    /// Constructor of ImageService class
     /// </summary>
-    /// <param name="repository"></param>
-    /// <param name="mapper"></param>
-    /// <param name="manager"></param>
+    /// <param name="repository">IGenericRepository</param>
+    /// <param name="mapper">IMapper</param>
+    /// <param name="manager">IImageManager</param>
     public ImageService(IGenericRepository repository, IMapper mapper, IImageManager manager)
     {
         _repository = repository;
@@ -32,8 +32,8 @@ public class ImageService
     /// <summary>
     /// Create a new entity of image
     /// </summary>
-    /// <param name="objFile"></param>
-    /// <returns></returns>
+    /// <param name="objFile">the image received from the request</param>
+    /// <returns>DTO of image</returns>
     [System.Runtime.Versioning.SupportedOSPlatform("windows")]
     public async Task <LocalImageDTO> Create(IFormFile objFile)
     {
@@ -54,10 +54,10 @@ public class ImageService
     }
 
     /// <summary>
-    /// 
+    /// Get DTO Entity by ID
     /// </summary>
-    /// <param name="id"></param>
-    /// <returns></returns>
+    /// <param name="id">entity ID</param>
+    /// <returns>DTO of image</returns>
     public async Task<LocalImageDTO>? GetById(Guid id)
     {
         var image =  await _repository.GetById<LocalImage>(id);
@@ -67,11 +67,11 @@ public class ImageService
     }
 
     /// <summary>
-    /// 
+    /// Updating entity
     /// </summary>
-    /// <param name="updateImage"></param>
-    /// <param name="id"></param>
-    /// <returns></returns>
+    /// <param name="updateImage">new entity for updating</param>
+    /// <param name="id">entity ID</param>
+    /// <returns>DTO of image</returns>
     public async Task<LocalImageDTO> Update(LocalImageUpdateDTO updateImage, Guid id)
     {
         var image = _repository.GetById<LocalImage>(id);
@@ -81,9 +81,9 @@ public class ImageService
     }
 
     /// <summary>
-    /// 
+    /// Delete Entity
     /// </summary>
-    /// <param name="id"></param>
+    /// <param name="id">entity ID</param>
     public async Task Delete(Guid id)
     {
         var image = await _repository.GetById<LocalImage>(id);
@@ -92,9 +92,9 @@ public class ImageService
     }
     
     /// <summary>
-    /// 
+    /// Getting list of DTO entities
     /// </summary>
-    /// <returns></returns>
+    /// <returns>list DTOs of image</returns>
     public async Task<List<LocalImageDTO>> GetList(string search)
     {
         var entities = await _repository.GetList<LocalImage>(image => image.Name.Contains(search));
@@ -103,10 +103,10 @@ public class ImageService
     }
 
     /// <summary>
-    /// 
+    /// Convert IFormFile format file to byte
     /// </summary>
-    /// <param name="image"></param>
-    /// <returns></returns>
+    /// <param name="image">image file</param>
+    /// <returns>image in byte format</returns>
     private static byte[]? ConvertToBytes(IFormFile image)
     {
         if (image.Length <= 0) return null;
@@ -117,10 +117,10 @@ public class ImageService
         }
     }
     /// <summary>
-    /// 
+    /// Convert IFormFile file to Image 
     /// </summary>
-    /// <param name="image"></param>
-    /// <returns></returns>
+    /// <param name="image">image file</param>
+    /// <returns>Image format file</returns>
     [System.Runtime.Versioning.SupportedOSPlatform("windows")]
     private static Task <Image> ConvertToSystemImageFormat(IFormFile image)
     {
@@ -132,10 +132,10 @@ public class ImageService
         }
     }
     /// <summary>
-    /// 
+    /// Get image in byte format
     /// </summary>
-    /// <param name="id"></param>
-    /// <returns></returns>
+    /// <param name="id">entity ID</param>
+    /// <returns>image in byte format</returns>
     public async Task<byte[]?> GetImageByte(Guid id)
     {
         var image = await _repository.GetById<LocalImage>(id);

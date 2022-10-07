@@ -1,7 +1,7 @@
 namespace MakeGreyImageAPI.Entities;
 
 /// <summary>
-/// 
+/// Image entity
 /// </summary>
 public class LocalImage
 {
