@@ -1,3 +1,5 @@
+using MakeGreyImageAPI.DTOs;
+
 namespace MakeGreyImageAPI.Infrastructure.Context;
 
 using Microsoft.EntityFrameworkCore;
@@ -20,7 +22,11 @@ public sealed class DataDbContext : DbContext
     /// A data set through which we can interact with tables from the database
     /// </summary>
     public DbSet<LocalImage>? LocalImages { get; set; }
-    
+    /// <summary>
+    /// 
+    /// </summary>
+    public DbSet<LocalImageConvertTask>? LocalImagesConvertTask { get; set; }
+
     /// <summary>
     /// Method for using the fluent api functionality
     /// </summary>
