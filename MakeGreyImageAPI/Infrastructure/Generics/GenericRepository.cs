@@ -49,19 +49,19 @@ public class GenericRepository : IGenericRepository
     /// <summary>
     /// Delete Entity
     /// </summary>
-    /// <param name="entity"></param>
-    /// <typeparam name="TEntity"></typeparam>
+    /// <param name="entity">deleting entity</param>
+    /// <typeparam name="TEntity">entity type</typeparam>
     public async void Delete<TEntity>(TEntity entity) where TEntity : class
     {
         _dbContext.Set<TEntity>().Remove(entity); 
         await _dbContext.SaveChangesAsync();
     }
     /// <summary>
-    /// 
+    /// Updating entity
     /// </summary>
-    /// <param name="entity"></param>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <returns></returns>
+    /// <param name="entity">new entity for updating</param>
+    /// <typeparam name="TEntity">entity type</typeparam>
+    /// <returns>updated entity</returns>
     public async Task<TEntity> Update<TEntity>(TEntity entity) where TEntity : class
     {
         _dbContext.Set<TEntity>().Attach(entity);
@@ -70,11 +70,11 @@ public class GenericRepository : IGenericRepository
         return entity;
     }
     /// <summary>
-    /// 
+    /// Getting list of entities
     /// </summary>
     /// <param name="expression"></param>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <returns></returns>
+    /// <typeparam name="TEntity">entity type</typeparam>
+    /// <returns>list of entities</returns>
     public async Task<IEnumerable<TEntity>> GetList<TEntity>(Expression<Func<TEntity, bool>>? expression = null) where TEntity : class
     {
         IQueryable<TEntity> query = _dbContext.Set<TEntity>();

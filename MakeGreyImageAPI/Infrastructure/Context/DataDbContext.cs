@@ -23,7 +23,7 @@ public sealed class DataDbContext : DbContext
     /// </summary>
     public DbSet<LocalImage>? LocalImages { get; set; }
     /// <summary>
-    /// 
+    /// A data set through which we can interact with tables from the database
     /// </summary>
     public DbSet<LocalImageConvertTask>? LocalImagesConvertTask { get; set; }
 

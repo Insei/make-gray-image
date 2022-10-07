@@ -29,14 +29,14 @@ public interface IGenericRepository
     /// <summary>
     /// Changes the accepted entity
     /// </summary>
-    /// <param name="entity">changeable entity</param>
-    /// <returns></returns>
+    /// <param name="entity">new entity for updating</param>
+    /// <returns>updated entity</returns>
     public Task<TEntity> Update<TEntity>(TEntity entity) where TEntity : class;
     /// <summary>
     /// Get Entity List
     /// </summary>
     /// <param name="expression"></param>
-    /// <returns></returns>
+    /// <returns>list of entities</returns>
     public Task<IEnumerable<TEntity>> GetList<TEntity>(
         Expression<Func<TEntity, bool>>? expression = null) where TEntity : class;
 }
