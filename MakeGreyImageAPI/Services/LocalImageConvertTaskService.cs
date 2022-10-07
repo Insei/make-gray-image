@@ -5,75 +5,80 @@ using MakeGreyImageAPI.Interfaces;
 
 namespace MakeGreyImageAPI.Services;
 /// <summary>
-/// 
+/// service for working with conversion Tasks
 /// </summary>
-public class ConversionImageTaskService
+public class LocalImageConvertTaskService
 {
     private IGenericRepository _repository;
     private IImageManager _manager;
     private IMapper _mapper;
     
     /// <summary>
-    /// 
+    /// Constructor of LocalImageConvertTaskService
     /// </summary>
-    /// <param name="repository"></param>
-    /// <param name="manager"></param>
-    public ConversionImageTaskService(IGenericRepository repository, IImageManager manager, IMapper mapper)
+    /// <param name="repository">IGenericRepository</param>
+    /// <param name="manager">IImageManager</param>
+    /// <param name="mapper">IMapper</param>
+    public LocalImageConvertTaskService(IGenericRepository repository, IImageManager manager, IMapper mapper)
     {
         _repository = repository;
         _manager = manager;
         _mapper = mapper;
     }
-
+    
     private async void ConvertImageCallback(Task<byte[]> imageTask, Guid taskId)
     {
+        await Task.Delay(5000);
         var image = await imageTask;
-        var greyImage = new GreyImage()
+        var convertTask = await _repository.GetById<LocalImageConvertTask>(taskId);
+        var localOriginImage = await _repository.GetById<LocalImage>(convertTask!.InImageId);
+        var localGreyImage = new LocalImage()
         {
-            Image = image
+            Name = "(Grey_Format)" + " " + localOriginImage!.Name,
+            Extension = localOriginImage.Extension,
+            Image = image,
+            Width = localOriginImage.Width,
+            Height = localOriginImage.Height
         };
-        var returnGreyImage = await _repository.Insert(greyImage);
-        var convertImage = new LocalImageConvertTask()
-        {
-            InImageId = taskId,
-            OutImageId = returnGreyImage.Id,
-            ConvertStatus = "The image is converted"
-        };
-        await _repository.Update(convertImage);
+        var newGreyImage = await _repository.Insert(localGreyImage);
+        
+        convertTask!.OutImageId = newGreyImage.Id;
+        convertTask.ConvertStatus = "Success";
+        await _repository.Update(convertTask);
     } 
     
     /// <summary>
-    /// 
+    /// Creates a gray image
     /// </summary>
-    /// <param name="convertImageCreate"></param>
-    /// <returns></returns>
+    /// <param name="convertImageCreate">entity task</param>
+    /// <returns>LocalImageConvertTaskDTO</returns>
     public async Task<LocalImageConvertTaskDTO> Create(LocalImageConvertTaskCreateDTO convertImageCreate)
     {
         var localImage = await _repository.GetById<LocalImage>(convertImageCreate.ImageId);
         
-        var convertImage = new LocalImageConvertTask()
+        var convertTask = new LocalImageConvertTask
         {
             InImageId = convertImageCreate.ImageId,
-            ConvertStatus = "Image in process of converting"
+            ConvertStatus = "Image processing"
         };
-        var returnConvertImage = _repository.Insert(convertImage);
+        var newConvertTask = await _repository.Insert(convertTask);
         
         var greyImageTask = _manager.ConvertToGrey(localImage!);
-        var _ = greyImageTask.ContinueWith((task) => {ConvertImageCallback(task, localImage!.Id);});
+        var _ = greyImageTask.ContinueWith(greyImageTask => {ConvertImageCallback(greyImageTask, newConvertTask!.Id);});
         
-        var result = _mapper.Map<LocalImageConvertTaskDTO>(returnConvertImage);
-        result.Parameters!.Color = "Grey";
-        result.Parameters.Extension = localImage!.Extension;
+        var result = _mapper.Map<LocalImageConvertTaskDTO>(newConvertTask);
+        // result.Parameters!.Color = "Grey";
+        // result.Parameters.Extension = localImage!.Extension;
         
         return result;
     }
     
     /// <summary>
-    /// 
+    /// Update LocalImageConvertTask entity
     /// </summary>
-    /// <param name="updateLocalImageConvert"></param>
-    /// <param name="id"></param>
-    /// <returns></returns>
+    /// <param name="updateLocalImageConvert">new entity for updating</param>
+    /// <param name="id">entity ID</param>
+    /// <returns>LocalImageConvertTaskDTO</returns>
     public async Task<LocalImageConvertTaskDTO> Update(LocalImageConvertTaskDTO updateLocalImageConvert, Guid id)
     {
         var imageConvertTask = _repository.GetById<LocalImageConvertTask>(id);
@@ -83,11 +88,11 @@ public class ConversionImageTaskService
     }
     
     /// <summary>
-    /// 
+    /// Delete Entity
     /// </summary>
-    /// <param name="id"></param>
+    /// <param name="id">entity ID</param>
     /// <exception cref="Exception"></exception>
-    public async void Delete(Guid id)
+    public async Task Delete(Guid id)
     {
         var imageConvertTask = await _repository.GetById<LocalImageConvertTask>(id);
         if(imageConvertTask == null) throw new Exception("Entity not found"); 
@@ -95,10 +100,10 @@ public class ConversionImageTaskService
     }
     
     /// <summary>
-    /// 
+    /// Get DTO Entity by ID
     /// </summary>
-    /// <param name="id"></param>
-    /// <returns></returns>
+    /// <param name="id">entity ID</param>
+    /// <returns>LocalImageConvertTaskDTO</returns>
     public async Task<LocalImageConvertTaskDTO> GetById(Guid id)
     {
         var imageConvertTask =  await _repository.GetById<LocalImageConvertTask>(id);
@@ -108,10 +113,10 @@ public class ConversionImageTaskService
     }
     
     /// <summary>
-    /// 
+    /// Getting list of DTO entities
     /// </summary>
     /// <param name="search"></param>
-    /// <returns></returns>
+    /// <returns>list DTOs of image</returns>
     public async Task<List<LocalImageConvertTaskDTO>> GetList(string search)
     {
         var entities = await _repository.GetList<LocalImageConvertTask>
