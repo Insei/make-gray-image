@@ -1,4 +1,4 @@
-namespace MakeGreyImageAPI.Entities;
+namespace MakeGreyImageAPI.DTOs;
 
     /// <summary>
     /// 
