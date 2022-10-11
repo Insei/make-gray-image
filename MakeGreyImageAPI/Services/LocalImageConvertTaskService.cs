@@ -1,5 +1,6 @@
 using AutoMapper;
 using MakeGreyImageAPI.DTOs;
+using MakeGreyImageAPI.DTOs.Sorts;
 using MakeGreyImageAPI.Entities;
 using MakeGreyImageAPI.Interfaces;
 
@@ -28,7 +29,6 @@ public class LocalImageConvertTaskService
     
     private async void ConvertImageCallback(Task<byte[]> imageTask, Guid taskId)
     {
-        await Task.Delay(5000);
         var image = await imageTask;
         var convertTask = await _repository.GetById<LocalImageConvertTask>(taskId);
         var localOriginImage = await _repository.GetById<LocalImage>(convertTask!.InImageId);
@@ -67,8 +67,8 @@ public class LocalImageConvertTaskService
         var _ = greyImageTask.ContinueWith(greyImageTask => {ConvertImageCallback(greyImageTask, newConvertTask!.Id);});
         
         var result = _mapper.Map<LocalImageConvertTaskDTO>(newConvertTask);
-        // result.Parameters!.Color = "Grey";
-        // result.Parameters.Extension = localImage!.Extension;
+        result.Parameters!.Color = "Grey";
+        result.Parameters.Extension = localImage!.Extension;
         
         return result;
     }
@@ -81,9 +81,9 @@ public class LocalImageConvertTaskService
     /// <returns>LocalImageConvertTaskDTO</returns>
     public async Task<LocalImageConvertTaskDTO> Update(LocalImageConvertTaskDTO updateLocalImageConvert, Guid id)
     {
-        var imageConvertTask = _repository.GetById<LocalImageConvertTask>(id);
-        await _mapper.Map(updateLocalImageConvert, imageConvertTask); 
-        await _repository.Update(imageConvertTask.Result!);
+        var imageConvertTask = await _repository.GetById<LocalImageConvertTask>(id);
+        _mapper.Map(updateLocalImageConvert, imageConvertTask); 
+        await _repository.Update(imageConvertTask!);
         return await _mapper.Map<Task<LocalImageConvertTaskDTO>>(imageConvertTask);
     }
     
@@ -111,17 +111,27 @@ public class LocalImageConvertTaskService
         var imageDto = _mapper.Map<LocalImageConvertTaskDTO>(imageConvertTask);
         return imageDto;
     }
-    
     /// <summary>
-    /// Getting list of DTO entities
+    /// 
     /// </summary>
+    /// <param name="pageNumber"></param>
+    /// <param name="pageSize"></param>
+    /// <param name="fieldName"></param>
+    /// <param name="direction"></param>
     /// <param name="search"></param>
-    /// <returns>list DTOs of image</returns>
-    public async Task<List<LocalImageConvertTaskDTO>> GetList(string search)
+    /// <returns></returns>
+    public async Task<PaginatedResult<List<LocalImageConvertTaskDTO>>> GetPaginatedList(int pageNumber = 0, int pageSize = 0,
+        string fieldName = "", SortDirection direction = SortDirection.Asc, string search = "")
     {
-        var entities = await _repository.GetList<LocalImageConvertTask>
-            (imageConvertTask => imageConvertTask.ConvertStatus.Contains(search));
-        var result = _mapper.Map<List<LocalImageConvertTaskDTO>>(entities);
+        var pagination = Pagination.Generate(pageNumber,pageSize, await _repository.Count<LocalImageConvertTask>(search));
+        var entities = await _repository.GetPaginatedList<LocalImageConvertTask>(search, fieldName, direction, 
+            pagination.CurrentPage, pagination.PageSize);
+        
+        var result = new PaginatedResult<List<LocalImageConvertTaskDTO>>
+        {
+            Pagination = pagination,
+            Data = _mapper.Map<List<LocalImageConvertTaskDTO>>(entities)
+        };
         return result;
     }
 }

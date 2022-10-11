@@ -1,4 +1,5 @@
 using MakeGreyImageAPI.DTOs;
+using MakeGreyImageAPI.DTOs.Sorts;
 using MakeGreyImageAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -32,16 +33,16 @@ public class LocalImageController : Controller
     [HttpPost("add")]
     public async Task<ApiResponse<LocalImageDTO>> Add([FromForm] IFormFile? objFile)
     {
-       if (objFile == null) return new ApiResponse<LocalImageDTO>()
+       if (objFile == null) return new ApiResponse<LocalImageDTO>
        {
-           Status = new Status()
+           Status = new Status
            {
                Message = "null object file, please repeat"
            }
        };
        try
        {
-           var response = new ApiResponse<LocalImageDTO>()
+           var response = new ApiResponse<LocalImageDTO>
            {
                Data = await _service.Create(objFile)
            };
@@ -49,9 +50,9 @@ public class LocalImageController : Controller
        }
        catch(Exception e)
        {
-           return new ApiResponse<LocalImageDTO>()
+           return new ApiResponse<LocalImageDTO>
            {
-               Status = new Status(){Message = e.Message}
+               Status = new Status{Message = e.Message}
            };
        }
     }
@@ -63,10 +64,9 @@ public class LocalImageController : Controller
     [HttpGet("{id}")]
     public async Task<ApiResponse<LocalImageDTO>> GetById(Guid id)
     {
-        var image = await _service.GetById(id)!;
-        var response = new ApiResponse<LocalImageDTO>()
+        var response = new ApiResponse<LocalImageDTO>
         {
-            Data = image
+            Data = await _service.GetById(id)!
         };
         return response;
     }
@@ -98,7 +98,7 @@ public class LocalImageController : Controller
     [HttpPut("{id}")]
     public async Task<ApiResponse<LocalImageDTO>> Update(LocalImageUpdateDTO updateImage, Guid id)
     {
-        var response = new ApiResponse<LocalImageDTO>()
+        var response = new ApiResponse<LocalImageDTO>
         {
             Data = await _service.Update(updateImage, id)
         };
@@ -107,18 +107,24 @@ public class LocalImageController : Controller
     
   
     /// <summary>
-    /// Http request to get the list of entities
+    /// 
     /// </summary>
-    /// <param name="search">parameter for searching from entities</param>
-    /// <returns>list of entities</returns>
+    /// <param name="pageNumber"></param>
+    /// <param name="pageSize"></param>
+    /// <param name="fieldName"></param>
+    /// <param name="direction"></param>
+    /// <param name="search"></param>
+    /// <returns></returns>
     [HttpGet("list")]
-    public async Task<ApiResponse<List<LocalImageDTO>>> GetList([FromQuery]string search)
+    public async Task<PaginatedResult<List<LocalImageDTO>>> GetList([FromQuery] int pageNumber = 0, int pageSize = 0,
+        string? fieldName = "", string? direction = "asc", string? search = "")
     {
-        var response = new ApiResponse<List<LocalImageDTO>>()
+        var directionEnum = SortDirection.Asc;
+        if (direction == "desc")
         {
-            Data = await _service.GetList(search)
-        };
-        return response;
+            directionEnum = SortDirection.Desc;
+        }
+        return await _service.GetPaginatedList(pageNumber, pageSize, fieldName!, directionEnum, search!);
     }
     
     /// <summary>
