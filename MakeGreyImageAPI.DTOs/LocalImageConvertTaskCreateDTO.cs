@@ -2,6 +2,12 @@ namespace MakeGreyImageAPI.DTOs;
 
 public class LocalImageConvertTaskCreateDTO
 {
+    /// <summary>
+    /// Unique identifier of original image
+    /// </summary>
     public Guid ImageId { get; set; }
-    // public ConvertParameters Parameters { get; set; }
+    /// <summary>
+    /// image parameters(color, extension)
+    /// </summary>
+    public ConvertParameters Parameters { get; set; }
 }
