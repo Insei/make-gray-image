@@ -88,24 +88,6 @@ public class LocalImageController : Controller
         };
         return response;
     }
-    
-    /// <summary>
-    /// Http request to update entity data
-    /// </summary>
-    /// <param name="updateImage">entity with changes</param>
-    /// <param name="id">entity ID</param>
-    /// <returns>updated entity</returns>
-    [HttpPut("{id}")]
-    public async Task<ApiResponse<LocalImageDTO>> Update(LocalImageUpdateDTO updateImage, Guid id)
-    {
-        var response = new ApiResponse<LocalImageDTO>
-        {
-            Data = await _service.Update(updateImage, id)
-        };
-        return response;
-    }
-    
-  
     /// <summary>
     /// Http request to get paginated list of entities
     /// </summary>
