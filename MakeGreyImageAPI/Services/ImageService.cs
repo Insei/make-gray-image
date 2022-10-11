@@ -66,21 +66,6 @@ public class ImageService
         var imageDto = _mapper.Map<LocalImageDTO>(image);
         return imageDto;
     }
-
-    /// <summary>
-    /// Updating entity
-    /// </summary>
-    /// <param name="updateImage">new entity for updating</param>
-    /// <param name="id">entity ID</param>
-    /// <returns>DTO of image</returns>
-    public async Task<LocalImageDTO> Update(LocalImageUpdateDTO updateImage, Guid id)
-    {
-        var image = await _repository.GetById<LocalImage>(id);
-        _mapper.Map(updateImage, image); 
-        await _repository.Update(image!);
-        return await _mapper.Map<Task<LocalImageDTO>>(image);
-    }
-
     /// <summary>
     /// Delete Entity
     /// </summary>

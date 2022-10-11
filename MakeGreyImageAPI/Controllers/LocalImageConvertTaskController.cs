@@ -93,24 +93,6 @@ public class LocalImageConvertTaskController : Controller
         };
         return response;
     }
-    
-    /// <summary>
-    /// Http request to update entity data
-    /// </summary>
-    /// <param name="updateImage">new entity for updating</param>
-    /// <param name="id">entity ID</param>
-    /// <returns>updated entity</returns>
-    [HttpPut("{id}")]
-    public async Task<ApiResponse<LocalImageConvertTaskDTO>> Update(LocalImageConvertTaskDTO updateImage, Guid id)
-    {
-        var response = new ApiResponse<LocalImageConvertTaskDTO>()
-        {
-            Data = await _imageConvertService.Update(updateImage, id)
-        };
-        return response;
-    }
-    
-  
     /// <summary>
     /// Http request to get paginated list of entities
     /// </summary>
