@@ -52,13 +52,13 @@ public interface IGenericRepository
     /// </summary>
     /// <param name="search"></param>
     /// <param name="orderBy"></param>
-    /// <param name="direction"></param>
+    /// <param name="orderDirection"></param>
     /// <param name="page"></param>
     /// <param name="pageSize"></param>
     /// <typeparam name="TEntity"></typeparam>
     /// <returns></returns>
     public Task<IEnumerable<TEntity>> GetPaginatedList<TEntity>(string search = "", string orderBy = "",
-        SortDirection direction = SortDirection.Asc,
+        SortDirection orderDirection = SortDirection.Asc,
         int page = 0, int pageSize = 0) where TEntity : class;
     /// <summary>
     /// 
