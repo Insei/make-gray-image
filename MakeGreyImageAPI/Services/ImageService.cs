@@ -1,6 +1,7 @@
 using System.Drawing;
 using AutoMapper;
 using MakeGreyImageAPI.DTOs;
+using MakeGreyImageAPI.DTOs.Sorts;
 using MakeGreyImageAPI.Entities;
 using MakeGreyImageAPI.Interfaces;
 
@@ -74,9 +75,9 @@ public class ImageService
     /// <returns>DTO of image</returns>
     public async Task<LocalImageDTO> Update(LocalImageUpdateDTO updateImage, Guid id)
     {
-        var image = _repository.GetById<LocalImage>(id);
-        await _mapper.Map(updateImage, image); 
-        await _repository.Update(image.Result!);
+        var image = await _repository.GetById<LocalImage>(id);
+        _mapper.Map(updateImage, image); 
+        await _repository.Update(image!);
         return await _mapper.Map<Task<LocalImageDTO>>(image);
     }
 
@@ -90,15 +91,29 @@ public class ImageService
         if(image == null) throw new Exception("Entity not found"); 
         _repository.Delete(image);
     }
-    
+
     /// <summary>
-    /// Getting list of DTO entities
+    /// 
     /// </summary>
-    /// <returns>list DTOs of image</returns>
-    public async Task<List<LocalImageDTO>> GetList(string search)
+    /// <param name="pageNumber"></param>
+    /// <param name="pageSize"></param>
+    /// <param name="fieldName"></param>
+    /// <param name="direction"></param>
+    /// <param name="search"></param>
+    /// <returns></returns>
+    public async Task<PaginatedResult<List<LocalImageDTO>>> GetPaginatedList(int pageNumber = 0, int pageSize = 0,
+        string fieldName = "", SortDirection direction = SortDirection.Asc, string search = "")
     {
-        var entities = await _repository.GetList<LocalImage>(image => image.Name.Contains(search));
-        var result = _mapper.Map<List<LocalImageDTO>>(entities);
+        var count = await _repository.Count<LocalImage>(search);
+        var pagination = Pagination.Generate(pageNumber,pageSize,count);
+        var entities = await _repository.GetPaginatedList<LocalImage>(search, fieldName, direction, 
+            pagination.CurrentPage, pagination.PageSize);
+        
+        var result = new PaginatedResult<List<LocalImageDTO>>
+        {
+            Pagination = pagination,
+            Data = _mapper.Map<List<LocalImageDTO>>(entities)
+        };
         return result;
     }
 

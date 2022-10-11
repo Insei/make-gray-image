@@ -1,4 +1,5 @@
 using System.Linq.Expressions;
+using MakeGreyImageAPI.DTOs.Sorts;
 
 namespace MakeGreyImageAPI.Interfaces;
 
@@ -33,10 +34,46 @@ public interface IGenericRepository
     /// <returns>updated entity</returns>
     public Task<TEntity> Update<TEntity>(TEntity entity) where TEntity : class;
     /// <summary>
-    /// Get Entity List
+    /// 
     /// </summary>
     /// <param name="expression"></param>
-    /// <returns>list of entities</returns>
-    public Task<IEnumerable<TEntity>> GetList<TEntity>(
-        Expression<Func<TEntity, bool>>? expression = null) where TEntity : class;
+    /// <param name="orderBy"></param>
+    /// <param name="includes"></param>
+    /// <param name="page"></param>
+    /// <param name="pageSize"></param>
+    /// <typeparam name="TEntity"></typeparam>
+    /// <returns></returns>
+    public Task<IEnumerable<TEntity>> GetPaginatedList<TEntity>(Expression<Func<TEntity, bool>>? expression = null,
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+        Func<IQueryable<TEntity>, IQueryable<TEntity>>? includes = null, int page = 0,
+        int pageSize = 0) where TEntity : class;
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="search"></param>
+    /// <param name="orderBy"></param>
+    /// <param name="direction"></param>
+    /// <param name="page"></param>
+    /// <param name="pageSize"></param>
+    /// <typeparam name="TEntity"></typeparam>
+    /// <returns></returns>
+    public Task<IEnumerable<TEntity>> GetPaginatedList<TEntity>(string search = "", string orderBy = "",
+        SortDirection direction = SortDirection.Asc,
+        int page = 0, int pageSize = 0) where TEntity : class;
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="expression"></param>
+    /// <typeparam name="TEntity"></typeparam>
+    /// <returns></returns>
+    public Task<int> Count<TEntity>(Expression<Func<TEntity, bool>>? expression = null) where TEntity : class;
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="search"></param>
+    /// <typeparam name="TEntity"></typeparam>
+    /// <returns></returns>
+    public Task<int> Count<TEntity>(string search)
+        where TEntity : class;
 }

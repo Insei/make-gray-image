@@ -1,4 +1,5 @@
 using MakeGreyImageAPI.DTOs;
+using MakeGreyImageAPI.DTOs.Sorts;
 using MakeGreyImageAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -111,18 +112,24 @@ public class LocalImageConvertTaskController : Controller
     
   
     /// <summary>
-    /// Http request to get the list of entities
+    /// 
     /// </summary>
-    /// <param name="search">parameter for searching from entities</param>
-    /// <returns>list of entities</returns>
+    /// <param name="pageNumber"></param>
+    /// <param name="pageSize"></param>
+    /// <param name="fieldName"></param>
+    /// <param name="direction"></param>
+    /// <param name="search"></param>
+    /// <returns></returns>
     [HttpGet("list")]
-    public async Task<ApiResponse<List<LocalImageConvertTaskDTO>>> GetList([FromQuery]string search)
+    public async Task<ApiResponse<List<LocalImageConvertTaskDTO>>> GetList([FromQuery] int pageNumber = 0, 
+        int pageSize = 0, string? fieldName = "", string? direction = "asc", string? search = "")
     {
-        var response = new ApiResponse<List<LocalImageConvertTaskDTO>>()
+        var directionEnum = SortDirection.Asc;
+        if (direction == "desc")
         {
-            Data = await _imageConvertService.GetList(search)
-        };
-        return response;
+            directionEnum = SortDirection.Desc;
+        }
+        return await _imageConvertService.GetPaginatedList(pageNumber, pageSize, fieldName!, directionEnum, search!);
     }
 
     /// <summary>
