@@ -11,10 +11,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<DataDbContext>(options =>
     options.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=ImageBase;Trusted_Connection=True;"), ServiceLifetime.Singleton);
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
+//the AddSingleton service is created at the first request,
+//and then each subsequent request will use the same instance
 builder.Services.AddSingleton<IImageManager, ImageManager>();
 builder.Services.AddSingleton<IGenericRepository, GenericRepository>();
 builder.Services.AddSingleton<ImageService>();
 builder.Services.AddSingleton<LocalImageConvertTaskService>();
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
