@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MakeGreyImageAPI.Infrastructure.Generics;
 /// <summary>
-/// 
+/// generalized Repository class type 
 /// </summary>
 public class GenericRepository : IGenericRepository
 {
@@ -104,14 +104,14 @@ public class GenericRepository : IGenericRepository
     /// </summary>
     /// <param name="search"></param>
     /// <param name="orderBy"></param>
-    /// <param name="direction"></param>
+    /// <param name="orderDirection"></param>
     /// <param name="page"></param>
     /// <param name="pageSize"></param>
     /// <typeparam name="TEntity"></typeparam>
     /// <returns></returns>
     /// <exception cref="NotImplementedException"></exception>
     public async Task<IEnumerable<TEntity>> GetPaginatedList<TEntity>(string search = "", string orderBy = "",
-        SortDirection direction = SortDirection.Asc, int page = 0, int pageSize = 0) where TEntity : class
+        SortDirection orderDirection = SortDirection.Asc, int page = 0, int pageSize = 0) where TEntity : class
     {
         var pageContext = page < 1 ? 0 : page;
         var pageSizeContext = pageSize < 1 ? 0 : pageSize;
@@ -131,13 +131,13 @@ public class GenericRepository : IGenericRepository
 
         if (orderExpression != null)
         { 
-            entities = direction switch
+            entities = orderDirection switch
             {
                 SortDirection.Asc => await GetPaginatedList(filterExpression, c => c.OrderBy(orderExpression),null,
                     pageContext, pageSizeContext),
                 SortDirection.Desc => await GetPaginatedList(filterExpression, c => c.OrderByDescending(orderExpression),null,
                     pageContext, pageSizeContext),
-                _ => throw new ArgumentOutOfRangeException(nameof(direction), direction, null)
+                _ => throw new ArgumentOutOfRangeException(nameof(orderDirection), orderDirection, null)
             };
         }
         return entities ?? await GetPaginatedList(filterExpression, null, null, page, pageSize);

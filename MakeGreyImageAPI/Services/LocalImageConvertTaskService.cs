@@ -116,15 +116,15 @@ public class LocalImageConvertTaskService
     /// </summary>
     /// <param name="pageNumber"></param>
     /// <param name="pageSize"></param>
-    /// <param name="fieldName"></param>
-    /// <param name="direction"></param>
+    /// <param name="orderBy"></param>
+    /// <param name="orderDirection"></param>
     /// <param name="search"></param>
     /// <returns></returns>
     public async Task<PaginatedResult<List<LocalImageConvertTaskDTO>>> GetPaginatedList(int pageNumber = 0, int pageSize = 0,
-        string fieldName = "", SortDirection direction = SortDirection.Asc, string search = "")
+        string orderBy = "", SortDirection orderDirection = SortDirection.Asc, string search = "")
     {
         var pagination = Pagination.Generate(pageNumber,pageSize, await _repository.Count<LocalImageConvertTask>(search));
-        var entities = await _repository.GetPaginatedList<LocalImageConvertTask>(search, fieldName, direction, 
+        var entities = await _repository.GetPaginatedList<LocalImageConvertTask>(search, orderBy, orderDirection, 
             pagination.CurrentPage, pagination.PageSize);
         
         var result = new PaginatedResult<List<LocalImageConvertTaskDTO>>
