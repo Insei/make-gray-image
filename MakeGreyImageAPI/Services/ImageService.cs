@@ -97,16 +97,16 @@ public class ImageService
     /// </summary>
     /// <param name="pageNumber"></param>
     /// <param name="pageSize"></param>
-    /// <param name="fieldName"></param>
-    /// <param name="direction"></param>
+    /// <param name="orderBy"></param>
+    /// <param name="orderDirection"></param>
     /// <param name="search"></param>
     /// <returns></returns>
     public async Task<PaginatedResult<List<LocalImageDTO>>> GetPaginatedList(int pageNumber = 0, int pageSize = 0,
-        string fieldName = "", SortDirection direction = SortDirection.Asc, string search = "")
+        string orderBy = "", SortDirection orderDirection = SortDirection.Asc, string search = "")
     {
         var count = await _repository.Count<LocalImage>(search);
         var pagination = Pagination.Generate(pageNumber,pageSize,count);
-        var entities = await _repository.GetPaginatedList<LocalImage>(search, fieldName, direction, 
+        var entities = await _repository.GetPaginatedList<LocalImage>(search, orderBy, orderDirection, 
             pagination.CurrentPage, pagination.PageSize);
         
         var result = new PaginatedResult<List<LocalImageDTO>>

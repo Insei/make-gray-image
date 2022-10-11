@@ -112,24 +112,24 @@ public class LocalImageConvertTaskController : Controller
     
   
     /// <summary>
-    /// 
+    /// Http request to get paginated list of entities
     /// </summary>
-    /// <param name="pageNumber"></param>
-    /// <param name="pageSize"></param>
-    /// <param name="fieldName"></param>
-    /// <param name="direction"></param>
-    /// <param name="search"></param>
-    /// <returns></returns>
+    /// <param name="pageNumber">the number of the displayed page</param>
+    /// <param name="pageSize">number of items per page</param>
+    /// <param name="orderBy">name of the sorting field</param>
+    /// <param name="orderDirection">order direction</param>
+    /// <param name="search">search string parameter</param>
+    /// <returns>PaginatedResult list of LocalImageConvertTaskDTO entities</returns>
     [HttpGet("list")]
-    public async Task<ApiResponse<List<LocalImageConvertTaskDTO>>> GetList([FromQuery] int pageNumber = 0, 
-        int pageSize = 0, string? fieldName = "", string? direction = "asc", string? search = "")
+    public async Task<PaginatedResult<List<LocalImageConvertTaskDTO>>> GetList([FromQuery] int pageNumber = 0, 
+        int pageSize = 0, string? orderBy = "", string? orderDirection = "asc", string? search = "")
     {
         var directionEnum = SortDirection.Asc;
-        if (direction == "desc")
+        if (orderDirection == "desc")
         {
             directionEnum = SortDirection.Desc;
         }
-        return await _imageConvertService.GetPaginatedList(pageNumber, pageSize, fieldName!, directionEnum, search!);
+        return await _imageConvertService.GetPaginatedList(pageNumber, pageSize, orderBy!, directionEnum, search!);
     }
 
     /// <summary>
