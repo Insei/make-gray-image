@@ -5,6 +5,8 @@ using MakeGreyImageAPI.Interfaces;
 using MakeGreyImageAPI.Managers;
 using MakeGreyImageAPI.Services;
 using Microsoft.EntityFrameworkCore;
+using FluentValidation.AspNetCore;
+using FluentValidation;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,8 +21,13 @@ builder.Services.AddSingleton<IGenericRepository, GenericRepository>();
 builder.Services.AddSingleton<ImageService>();
 builder.Services.AddSingleton<LocalImageConvertTaskService>();
 
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddFluentValidationClientsideAdapters();
+builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
+
 
 //it is necessary for requests from the host locale,
 //to work without a signed certificate, and we allow the use of any HTTP methods and hiders
@@ -35,6 +42,7 @@ builder.Services.AddCors(options =>
             .WithExposedHeaders();
     });
 });
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
