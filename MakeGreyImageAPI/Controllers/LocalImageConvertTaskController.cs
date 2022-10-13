@@ -35,7 +35,7 @@ public class LocalImageConvertTaskController : Controller
     /// <param name="imageConvertTask"></param>
     /// <returns>image information</returns>
     [HttpPost]
-    public async Task<ApiResponse<LocalImageConvertTaskDTO>> Add([FromForm] LocalImageConvertTaskCreateDTO? imageConvertTask)
+    public async Task<ApiResponse<LocalImageConvertTaskDTO>> Add([FromBody] LocalImageConvertTaskCreateDTO? imageConvertTask)
     {
         if (imageConvertTask == null) return new ApiResponse<LocalImageConvertTaskDTO>()
         {
