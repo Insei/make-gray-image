@@ -1,5 +1,6 @@
 using AutoMapper;
 using MakeGreyImageAPI.DTOs;
+using MakeGreyImageAPI.DTOs.Results;
 using MakeGreyImageAPI.DTOs.Sorts;
 using MakeGreyImageAPI.Entities;
 using MakeGreyImageAPI.Interfaces;
@@ -67,8 +68,8 @@ public class LocalImageConvertTaskService
         var _ = greyImageTask.ContinueWith(greyImageTask => {ConvertImageCallback(greyImageTask, newConvertTask!.Id);});
         
         var result = _mapper.Map<LocalImageConvertTaskDTO>(newConvertTask);
-        result.Parameters!.Color = "Grey";
-        result.Parameters.Extension = localImage!.Extension;
+        // result.Parameters!.Color = "Grey";
+        // result.Parameters.Extension = localImage!.Extension;
         
         return result;
     }
@@ -95,7 +96,7 @@ public class LocalImageConvertTaskService
     public async Task Delete(Guid id)
     {
         var imageConvertTask = await _repository.GetById<LocalImageConvertTask>(id);
-        if(imageConvertTask == null) throw new Exception("Entity not found"); 
+        if(imageConvertTask == null) throw new BadHttpRequestException("Entity not found"); 
         _repository.Delete(imageConvertTask);
     }
     
@@ -107,19 +108,19 @@ public class LocalImageConvertTaskService
     public async Task<LocalImageConvertTaskDTO> GetById(Guid id)
     {
         var imageConvertTask =  await _repository.GetById<LocalImageConvertTask>(id);
-        if (imageConvertTask == null) throw new Exception("Entity not found"); 
+        if (imageConvertTask == null) throw new BadHttpRequestException("Entity not found"); 
         var imageDto = _mapper.Map<LocalImageConvertTaskDTO>(imageConvertTask);
         return imageDto;
     }
     /// <summary>
-    /// 
+    /// Get paginated Entity List 
     /// </summary>
-    /// <param name="pageNumber"></param>
-    /// <param name="pageSize"></param>
-    /// <param name="orderBy"></param>
-    /// <param name="orderDirection"></param>
-    /// <param name="search"></param>
-    /// <returns></returns>
+    /// <param name="pageNumber">page number</param>
+    /// <param name="pageSize">page size</param>
+    /// <param name="orderBy">sorting</param>
+    /// <param name="orderDirection">sorting direction</param>
+    /// <param name="search">search string</param>
+    /// <returns>paginated list of entities</returns>
     public async Task<PaginatedResult<List<LocalImageConvertTaskDTO>>> GetPaginatedList(int pageNumber = 0, int pageSize = 0,
         string orderBy = "", SortDirection orderDirection = SortDirection.Asc, string search = "")
     {
