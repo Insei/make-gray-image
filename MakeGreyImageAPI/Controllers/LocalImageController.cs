@@ -1,4 +1,7 @@
+using System.Linq.Expressions;
+using System.Net;
 using MakeGreyImageAPI.DTOs;
+using MakeGreyImageAPI.DTOs.Results;
 using MakeGreyImageAPI.DTOs.Sorts;
 using MakeGreyImageAPI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -24,51 +27,33 @@ public class LocalImageController : Controller
     {
         _service = service;
     }
-    
+
     /// <summary>
     /// Http request to add data to DB
     /// </summary>
     /// <param name="objFile">accepted file</param>
     /// <returns>image information</returns>
     [HttpPost("add")]
-    public async Task<ApiResponse<LocalImageDTO>> Add([FromForm] IFormFile? objFile)
+    public async Task<ActionResult<LocalImageDTO>> Add([FromForm] IFormFile? objFile)
     {
-       if (objFile == null) return new ApiResponse<LocalImageDTO>
-       {
-           Status = new Status
-           {
-               Message = "null object file, please repeat"
-           }
-       };
-       try
-       {
-           var response = new ApiResponse<LocalImageDTO>
-           {
-               Data = await _service.Create(objFile)
-           };
-           return response;
-       }
-       catch(Exception e)
-       {
-           return new ApiResponse<LocalImageDTO>
-           {
-               Status = new Status{Message = e.Message}
-           };
-       }
+        if (objFile != null)
+        {
+            return Ok(await _service.Create(objFile));
+        }
+        return BadRequest();
     }
+    
     /// <summary>
     /// Http request to get an entity by Id
     /// </summary>
     /// <param name="id">entity ID</param>
     /// <returns>Image entity</returns>
     [HttpGet("{id}")]
-    public async Task<ApiResponse<LocalImageDTO>> GetById(Guid id)
+    public async Task<ActionResult<LocalImageDTO>> GetById(Guid id)
     {
-        var response = new ApiResponse<LocalImageDTO>
-        {
-            Data = await _service.GetById(id)!
-        };
-        return response;
+        var result = await _service.GetById(id);
+        if (result != null) return Ok(result);
+        return BadRequest();
     }
     
     /// <summary>
@@ -76,17 +61,10 @@ public class LocalImageController : Controller
     /// </summary>
     /// <param name="id">entity ID</param>
     [HttpDelete("{id}")]
-    public async Task<EmptyApiResponse> Delete([FromQuery]Guid id)
+    public async Task Delete([FromQuery]Guid id)
     {
-        await _service.Delete(id);
-        var response = new EmptyApiResponse
-        {
-            Status = new Status
-            {
-                Message = "Successful deleting"
-            }
-        };
-        return response;
+        await _service.Delete(id); 
+        Ok("Successfully");
     }
     /// <summary>
     /// Http request to get paginated list of entities
@@ -110,28 +88,28 @@ public class LocalImageController : Controller
     }
     
     /// <summary>
-    /// Http request to download entity
+    /// Http request to download image
     /// </summary>
     /// <param name="id">entity ID</param>
     /// <returns>image entity</returns>
     [HttpGet("{id}/download")]
     public async Task<IActionResult> Download(Guid id)
     {
-        var imageExtension = _service.GetById(id)?.Result.Extension;
-        if (imageExtension == null) return Content("Failed");
+        var imageExtension = _service.GetById(id).Result?.Extension;
+        if (imageExtension == null) return BadRequest();
         try
         {
             var byteImage = await _service.GetImageByte(id);
             if (imageExtension.ToLower().Contains("jpeg") || imageExtension.ToLower().Contains("jpg"))
             {
-                if (byteImage != null) return File(byteImage, "image/jpeg");
+                if (byteImage != null) return Ok(File(byteImage, "image/jpeg"));
             }
 
-            if (byteImage != null) return File(byteImage, "image/png");
+            if (byteImage != null) return Ok(File(byteImage, "image/png"));
         }
         catch (Exception ex)
         {
-            return Content(ex.Message);
+            return BadRequest(ex.Message);
         }
         throw new InvalidOperationException();
     }

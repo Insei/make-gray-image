@@ -1,4 +1,5 @@
 using MakeGreyImageAPI.DTOs;
+using MakeGreyImageAPI.DTOs.Results;
 using MakeGreyImageAPI.DTOs.Sorts;
 using MakeGreyImageAPI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -35,29 +36,16 @@ public class LocalImageConvertTaskController : Controller
     /// <param name="imageConvertTask"></param>
     /// <returns>image information</returns>
     [HttpPost]
-    public async Task<ApiResponse<LocalImageConvertTaskDTO>> Add([FromBody] LocalImageConvertTaskCreateDTO? imageConvertTask)
+    public async Task<ActionResult<LocalImageConvertTaskDTO>> Add([FromBody] LocalImageConvertTaskCreateDTO? imageConvertTask)
     {
-        if (imageConvertTask == null) return new ApiResponse<LocalImageConvertTaskDTO>()
-        {
-            Status = new Status()
-            {
-                Message = "null object file, please repeat"
-            }
-        };
+        if (imageConvertTask == null) return BadRequest();
         try
         {
-            var response = new ApiResponse<LocalImageConvertTaskDTO>()
-            {
-                Data = await _imageConvertService.Create(imageConvertTask)
-            };
-            return response;
+            return Ok(await _imageConvertService.Create(imageConvertTask));
         }
         catch(Exception e)
         {
-            return new ApiResponse<LocalImageConvertTaskDTO>()
-            {
-                Status = new Status(){Message = e.Message}
-            };
+            return BadRequest(e.Message);
         }
     }
     /// <summary>
@@ -66,14 +54,9 @@ public class LocalImageConvertTaskController : Controller
     /// <param name="id">entity ID</param>
     /// <returns>image entity</returns>
     [HttpGet("{id}")]
-    public async Task<ApiResponse<LocalImageConvertTaskDTO>> GetById(Guid id)
+    public async Task<ActionResult> GetById(Guid id)
     {
-        var localImageConvert = await _imageConvertService.GetById(id);
-        var response = new ApiResponse<LocalImageConvertTaskDTO>()
-        {
-            Data = localImageConvert
-        };
-        return response;
+        return Ok(await _imageConvertService.GetById(id));
     }
     
     /// <summary>
@@ -81,17 +64,10 @@ public class LocalImageConvertTaskController : Controller
     /// </summary>
     /// <param name="id">entity ID</param>
     [HttpDelete("{id}")]
-    public async Task<EmptyApiResponse> Delete([FromQuery]Guid id)
+    public async Task Delete([FromQuery]Guid id)
     {
         await _imageConvertService.Delete(id);
-        var response = new EmptyApiResponse
-        {
-            Status = new Status
-            {
-                Message = "Successful deleting"
-            }
-        };
-        return response;
+        Ok("Successfully");
     }
     /// <summary>
     /// Http request to get paginated list of entities
@@ -112,34 +88,5 @@ public class LocalImageConvertTaskController : Controller
             directionEnum = SortDirection.Desc;
         }
         return await _imageConvertService.GetPaginatedList(pageNumber, pageSize, orderBy!, directionEnum, search!);
-    }
-
-    /// <summary>
-    /// Http request to download entity
-    /// </summary>
-    /// <param name="id">entity ID</param>
-    /// <returns>image entity</returns>
-    /// <exception cref="InvalidOperationException"></exception>
-    [HttpGet("{id}/download")]
-    public async Task<IActionResult> Download(Guid id)
-    {
-        var imageExtension = _imageService.GetById(id)?.Result.Extension;
-        if (imageExtension == null) return Content("Failed");
-        try
-        {
-            var byteImage = await _imageService.GetImageByte(id);
-            if (imageExtension.ToLower().Contains("jpeg") || imageExtension.ToLower().Contains("jpg"))
-            {
-                if (byteImage != null) return File(byteImage, "image/jpeg");
-            }
-
-            if (byteImage != null) return File(byteImage, "image/png");
-        }
-        catch (Exception ex)
-        {
-            return Content(ex.Message);
-        }
-
-        throw new InvalidOperationException();
     }
 }
