@@ -53,10 +53,10 @@ public class Pagination
 /// 
 /// </summary>
 /// <typeparam name="T"></typeparam>
-public class PaginatedResult<T> : ApiResponse<T>
+public class PaginatedResult<T>
 {
     public Pagination Pagination { get; set; }
-
+    public T Data { get; set; }
     public PaginatedResult()
     {
         Pagination = new Pagination();
