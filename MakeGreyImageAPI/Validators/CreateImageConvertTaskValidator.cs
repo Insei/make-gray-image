@@ -5,15 +5,15 @@ using MakeGreyImageAPI.Interfaces;
 
 namespace MakeGreyImageAPI.Validators;
 /// <summary>
-/// 
+/// Validation for LocalImageConvertTaskCreateDTO
 /// </summary>
 public class CreateImageConvertTaskValidator : AbstractValidator<LocalImageConvertTaskCreateDTO>
 {
     private readonly IGenericRepository _repository;
     /// <summary>
-    /// 
+    /// Constructor of CreateImageConvertTaskValidator
     /// </summary>
-    /// <param name="repository"></param>
+    /// <param name="repository">IGenericRepository</param>
     public CreateImageConvertTaskValidator(IGenericRepository repository)
     {
         _repository = repository;
@@ -22,10 +22,10 @@ public class CreateImageConvertTaskValidator : AbstractValidator<LocalImageConve
             .Must(IsImageExist).WithMessage("Image with this ID {PropertyName} does not exist");
     }
     /// <summary>
-    /// 
+    /// Checking for the existence of an image
     /// </summary>
-    /// <param name="id"></param>
-    /// <returns></returns>
+    /// <param name="id">image Id</param>
+    /// <returns>boolean</returns>
     private bool IsImageExist(Guid id)
     {
         return _repository.GetById<LocalImage>(id).Result != null;

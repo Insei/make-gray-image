@@ -1,8 +1,6 @@
-using MakeGreyImageAPI.DTOs.Sorts;
-
-namespace MakeGreyImageAPI.DTOs;
+namespace MakeGreyImageAPI.DTOs.Results;
 /// <summary>
-/// 
+/// Pagination class
 /// </summary>
 public class Pagination
 {
@@ -26,15 +24,12 @@ public class Pagination
         PageSize = 10;
     }
     /// <summary>
-    /// 
+    /// Generates pagination of entities
     /// </summary>
-    /// <param name="pageNumber"></param>
-    /// <param name="pageSize"></param>
-    /// <param name="fieldName"></param>
-    /// <param name="totalCount"></param>
-    /// <param name="direction"></param>
-    /// <param name="search"></param>
-    /// <returns></returns>
+    /// <param name="pageNumber">page number</param>
+    /// <param name="pageSize">page size</param>
+    /// <param name="totalCount">total count</param>
+    /// <returns>Pagination</returns>
     public static Pagination Generate(int pageNumber = 0, int pageSize = 0, int totalCount = 0)
     {
         var page = pageNumber > 0 ? pageNumber : 1;
@@ -50,9 +45,9 @@ public class Pagination
     }
 }
 /// <summary>
-/// 
+/// Class pagination results
 /// </summary>
-/// <typeparam name="T"></typeparam>
+/// <typeparam name="T">entity type</typeparam>
 public class PaginatedResult<T>
 {
     public Pagination Pagination { get; set; }

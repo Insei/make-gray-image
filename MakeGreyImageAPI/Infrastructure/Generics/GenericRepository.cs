@@ -72,15 +72,15 @@ public class GenericRepository : IGenericRepository
         return entity;
     }
     /// <summary>
-    /// 
+    /// Get entity list
     /// </summary>
-    /// <param name="expression"></param>
-    /// <param name="orderBy"></param>
-    /// <param name="includes"></param>
-    /// <param name="page"></param>
-    /// <param name="pageSize"></param>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <returns></returns>
+    /// <param name="expression">filter</param>
+    /// <param name="orderBy">sorting</param>
+    /// <param name="includes">includes</param>
+    /// <param name="page">current page</param>
+    /// <param name="pageSize">page size</param>
+    /// <typeparam name="TEntity">entity type</typeparam>
+    /// <returns>list of entities</returns>
     public async Task<IEnumerable<TEntity>> GetPaginatedList<TEntity>(Expression<Func<TEntity, bool>>? expression = null, 
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null, Func<IQueryable<TEntity>, 
             IQueryable<TEntity>>? includes = null, int page = 0, int pageSize = 0) where TEntity : class
@@ -100,16 +100,15 @@ public class GenericRepository : IGenericRepository
         return await query.ToListAsync();
     }
     /// <summary>
-    /// 
+    /// Get Entity List (search in all fields)
     /// </summary>
-    /// <param name="search"></param>
-    /// <param name="orderBy"></param>
-    /// <param name="orderDirection"></param>
-    /// <param name="page"></param>
-    /// <param name="pageSize"></param>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <returns></returns>
-    /// <exception cref="NotImplementedException"></exception>
+    /// <param name="search">search string</param>
+    /// <param name="orderBy">sorting</param>
+    /// <param name="orderDirection">sorting direction</param>
+    /// <param name="page">current page</param>
+    /// <param name="pageSize">page size</param>
+    /// <typeparam name="TEntity">entity type</typeparam>
+    /// <returns>list of entities</returns>
     public async Task<IEnumerable<TEntity>> GetPaginatedList<TEntity>(string search = "", string orderBy = "",
         SortDirection orderDirection = SortDirection.Asc, int page = 0, int pageSize = 0) where TEntity : class
     {
@@ -143,11 +142,11 @@ public class GenericRepository : IGenericRepository
         return entities ?? await GetPaginatedList(filterExpression, null, null, page, pageSize);
     }
     /// <summary>
-    /// 
+    /// Count Elements with specified filter
     /// </summary>
-    /// <param name="expression"></param>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <returns></returns>
+    /// <param name="expression">filter</param>
+    /// <typeparam name="TEntity">entity type</typeparam>
+    /// <returns>number of entities</returns>
     public async Task<int> Count<TEntity>(Expression<Func<TEntity, bool>>? expression = null) where TEntity : class
     {
         if (expression != null)
@@ -155,11 +154,11 @@ public class GenericRepository : IGenericRepository
         return await _dbContext.Set<TEntity>().CountAsync();
     }
     /// <summary>
-    /// 
+    /// Count Elements with search string (search in all fields)
     /// </summary>
-    /// <param name="search"></param>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <returns></returns>
+    /// <param name="search">search string</param>
+    /// <typeparam name="TEntity">entity type</typeparam>
+    /// <returns>number of entities</returns>
     public async Task<int> Count<TEntity>(string search) where TEntity : class
     {
         Expression<Func<TEntity, bool>>? filterExpression = null;

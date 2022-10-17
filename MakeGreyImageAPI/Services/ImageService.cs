@@ -1,6 +1,7 @@
 using System.Drawing;
 using AutoMapper;
 using MakeGreyImageAPI.DTOs;
+using MakeGreyImageAPI.DTOs.Results;
 using MakeGreyImageAPI.DTOs.Sorts;
 using MakeGreyImageAPI.Entities;
 using MakeGreyImageAPI.Interfaces;
@@ -59,10 +60,9 @@ public class ImageService
     /// </summary>
     /// <param name="id">entity ID</param>
     /// <returns>DTO of image</returns>
-    public async Task<LocalImageDTO>? GetById(Guid id)
+    public async Task<LocalImageDTO?> GetById(Guid id)
     {
         var image =  await _repository.GetById<LocalImage>(id);
-        if (image == null) throw new Exception("Entity not found"); 
         var imageDto = _mapper.Map<LocalImageDTO>(image);
         return imageDto;
     }
@@ -73,19 +73,19 @@ public class ImageService
     public async Task Delete(Guid id)
     {
         var image = await _repository.GetById<LocalImage>(id);
-        if(image == null) throw new Exception("Entity not found"); 
+        if(image == null) throw new BadHttpRequestException("Entity not found"); 
         _repository.Delete(image);
     }
 
     /// <summary>
-    /// 
+    /// Get paginated Entity List 
     /// </summary>
-    /// <param name="pageNumber"></param>
-    /// <param name="pageSize"></param>
-    /// <param name="orderBy"></param>
-    /// <param name="orderDirection"></param>
-    /// <param name="search"></param>
-    /// <returns></returns>
+    /// <param name="pageNumber">page number</param>
+    /// <param name="pageSize">page size</param>
+    /// <param name="orderBy">sorting</param>
+    /// <param name="orderDirection">sorting direction</param>
+    /// <param name="search">search string</param>
+    /// <returns>paginated list of entities</returns>
     public async Task<PaginatedResult<List<LocalImageDTO>>> GetPaginatedList(int pageNumber = 0, int pageSize = 0,
         string orderBy = "", SortDirection orderDirection = SortDirection.Asc, string search = "")
     {
