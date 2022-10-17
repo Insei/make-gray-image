@@ -23,10 +23,8 @@ public class ImageManager : IImageManager
     { 
         await using (var memoryStream = new MemoryStream(image.Image!))
         {
-            // await image.CopyToAsync(memoryStream);
             using (var bmpImg = (Bitmap)Image.FromStream(memoryStream))
             {
-                // var bmpImg = (Bitmap)img;
                 var greyImg = new Bitmap(bmpImg.Width, bmpImg.Height);
                 for (int j = 0; j < bmpImg.Height; j++)
                 for (int i = 0; i < bmpImg.Width; i++)
