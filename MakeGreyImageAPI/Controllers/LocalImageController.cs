@@ -59,7 +59,7 @@ public class LocalImageController : Controller
     /// </summary>
     /// <param name="id">entity ID</param>
     [HttpDelete("{id}")]
-    public async Task<ActionResult> Delete([FromQuery]Guid id)
+    public async Task<ActionResult> Delete(Guid id)
     {
         var image = await _service.GetById(id);
         if (image == null) return NotFound();
