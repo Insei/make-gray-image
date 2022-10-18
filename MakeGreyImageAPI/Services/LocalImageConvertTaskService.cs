@@ -96,7 +96,15 @@ public class LocalImageConvertTaskService
     public async Task Delete(Guid id)
     {
         var imageConvertTask = await _repository.GetById<LocalImageConvertTask>(id);
-        if(imageConvertTask == null) throw new BadHttpRequestException("Entity not found"); 
+        if(imageConvertTask == null) return;
+        
+        if (imageConvertTask.OutImageId != null)
+        {
+           var greyImage = await _repository.GetById<LocalImage>((Guid) imageConvertTask.OutImageId); 
+           
+           if(greyImage != null)
+               _repository.Delete(greyImage);
+        }
         _repository.Delete(imageConvertTask);
     }
     
@@ -105,10 +113,10 @@ public class LocalImageConvertTaskService
     /// </summary>
     /// <param name="id">entity ID</param>
     /// <returns>LocalImageConvertTaskDTO</returns>
-    public async Task<LocalImageConvertTaskDTO> GetById(Guid id)
+    public async Task<LocalImageConvertTaskDTO?> GetById(Guid id)
     {
         var imageConvertTask =  await _repository.GetById<LocalImageConvertTask>(id);
-        if (imageConvertTask == null) throw new BadHttpRequestException("Entity not found"); 
+        if (imageConvertTask == null) return null;
         var imageDto = _mapper.Map<LocalImageConvertTaskDTO>(imageConvertTask);
         return imageDto;
     }
