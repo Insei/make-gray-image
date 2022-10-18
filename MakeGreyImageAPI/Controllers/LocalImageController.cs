@@ -64,7 +64,7 @@ public class LocalImageController : Controller
     public async Task Delete([FromQuery]Guid id)
     {
         await _service.Delete(id); 
-        Ok("Successfully");
+        Ok(StatusCode(204));
     }
     /// <summary>
     /// Http request to get paginated list of entities
