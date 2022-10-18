@@ -14,8 +14,7 @@ builder.Services.AddDbContext<DataDbContext>(options =>
     options.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=ImageBase;Trusted_Connection=True;"), ServiceLifetime.Singleton);
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
-//the AddSingleton service is created at the first request,
-//and then each subsequent request will use the same instance
+// We use asynchronous conversion which continues after the request is executed
 builder.Services.AddSingleton<IImageManager, ImageManager>();
 builder.Services.AddSingleton<IGenericRepository, GenericRepository>();
 builder.Services.AddSingleton<ImageService>();
