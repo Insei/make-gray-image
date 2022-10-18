@@ -12,7 +12,7 @@ public interface IGenericRepository
     /// Add new entity
     /// </summary>
     /// <param name="entity">entity for adding</param>
-    public Task<TEntity> Insert<TEntity>(TEntity? entity) where TEntity : class;
+    public Task<TEntity> Insert<TEntity>(TEntity entity) where TEntity : class;
 
     /// <summary>
     /// Get entity by ID

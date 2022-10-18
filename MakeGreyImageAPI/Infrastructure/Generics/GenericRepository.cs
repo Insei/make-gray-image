@@ -30,7 +30,7 @@ public class GenericRepository : IGenericRepository
     /// <param name="entity">Entity for Add</param>
     /// <typeparam name="TEntity">Entity type</typeparam>
     /// <returns>Created Entity</returns>
-    public async Task<TEntity> Insert<TEntity>(TEntity? entity) where TEntity : class
+    public async Task<TEntity> Insert<TEntity>(TEntity entity) where TEntity : class
     {
         _dbContext.Set<TEntity>().Add(entity!);
         _dbContext.Entry(entity!).State = EntityState.Added;
