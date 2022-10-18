@@ -7,6 +7,7 @@ using MakeGreyImageAPI.Services;
 using Microsoft.EntityFrameworkCore;
 using FluentValidation.AspNetCore;
 using FluentValidation;
+using MakeGreyImageAPI.Middlewares;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -51,7 +52,7 @@ var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    app.UseDeveloperExceptionPage();
+    // app.UseDeveloperExceptionPage();
     app.UseSwagger();
     app.UseSwaggerUI();
 }
@@ -69,5 +70,5 @@ app.UseStaticFiles();
 app.UseAuthorization();
 SeedDataDb.Initialize(app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope().ServiceProvider);
 app.MapControllers();
-
+app.UseMiddleware<ErrorHandlerMiddleware>();
 app.Run();
