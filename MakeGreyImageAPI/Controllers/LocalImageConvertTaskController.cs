@@ -17,17 +17,14 @@ namespace MakeGreyImageAPI.Controllers;
 public class LocalImageConvertTaskController : Controller
 {
     private readonly LocalImageConvertTaskService _imageConvertService;
-    private readonly ImageService _imageService;
 
     /// <summary>
     /// Constructor of class LocalImageConvertTaskController
     /// </summary>
     /// <param name="imageConvertService">LocalImageConvertTaskService class</param>
-    /// <param name="imageService">ImageService class</param>
-    public LocalImageConvertTaskController(LocalImageConvertTaskService imageConvertService, ImageService imageService)
+    public LocalImageConvertTaskController(LocalImageConvertTaskService imageConvertService)
     {
         _imageConvertService = imageConvertService;
-        _imageService = imageService;
     }
 
     /// <summary>
