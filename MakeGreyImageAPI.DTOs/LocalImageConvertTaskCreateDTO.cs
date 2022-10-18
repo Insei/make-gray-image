@@ -6,8 +6,8 @@ public class LocalImageConvertTaskCreateDTO
     /// Unique identifier of original image
     /// </summary>
     public Guid ImageId { get; set; }
-    // /// <summary>
-    // /// image parameters(color, extension)
-    // /// </summary>
-    // public ConvertParameters? Parameters { get; set; }
+     /// <summary>
+     /// image parameters(color, extension)
+     /// </summary>
+     public ConvertParameters? Parameters { get; set; }
 }

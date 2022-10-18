@@ -68,8 +68,8 @@ public class LocalImageConvertTaskService
         var _ = greyImageTask.ContinueWith(greyImageTask => {ConvertImageCallback(greyImageTask, newConvertTask!.Id);});
         
         var result = _mapper.Map<LocalImageConvertTaskDTO>(newConvertTask);
-        // result.Parameters!.Color = "Grey";
-        // result.Parameters.Extension = localImage!.Extension;
+        result.Parameters!.Color = "Grey";
+        result.Parameters.Extension = localImage!.Extension;
         
         return result;
     }
