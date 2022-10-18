@@ -1,5 +1,3 @@
-using System.Linq.Expressions;
-using System.Net;
 using MakeGreyImageAPI.DTOs;
 using MakeGreyImageAPI.DTOs.Results;
 using MakeGreyImageAPI.DTOs.Sorts;
@@ -53,7 +51,7 @@ public class LocalImageController : Controller
     {
         var result = await _service.GetById(id);
         if (result != null) return Ok(result);
-        return BadRequest();
+        return NotFound();
     }
     
     /// <summary>
@@ -61,10 +59,12 @@ public class LocalImageController : Controller
     /// </summary>
     /// <param name="id">entity ID</param>
     [HttpDelete("{id}")]
-    public async Task Delete([FromQuery]Guid id)
+    public async Task<ActionResult> Delete([FromQuery]Guid id)
     {
+        var image = await _service.GetById(id);
+        if (image == null) return NotFound();
         await _service.Delete(id); 
-        Ok(StatusCode(204));
+        return NoContent();
     }
     /// <summary>
     /// Http request to get paginated list of entities
@@ -95,15 +95,17 @@ public class LocalImageController : Controller
     [HttpGet("{id}/download")]
     public async Task<IActionResult> Download(Guid id)
     {
-        var imageExtension = _service.GetById(id).Result?.Extension;
-        if (imageExtension == null) return BadRequest(StatusCode(404));
+        var image = await _service.GetById(id);
+        if (image == null) return NotFound();
+        var imageExtension = image.Extension;
        
         var byteImage = await _service.GetImageByte(id);
+        var contentType = "image/png";
         if (imageExtension.ToLower().Contains("jpeg") || imageExtension.ToLower().Contains("jpg"))
         {
-            if (byteImage != null) return Ok(File(byteImage, "image/jpeg"));
+            contentType = "image/jpeg";
         }
-        if (byteImage != null) return Ok(File(byteImage, "image/png"));
+        if (byteImage != null) return Ok(File(byteImage, contentType));
    
         return BadRequest();
     }

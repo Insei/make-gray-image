@@ -57,10 +57,10 @@ public class LocalImageConvertTaskController : Controller
     /// </summary>
     /// <param name="id">entity ID</param>
     [HttpDelete("{id}")]
-    public async Task Delete([FromQuery]Guid id)
+    public async Task<ActionResult> Delete([FromQuery]Guid id)
     {
         await _imageConvertService.Delete(id);
-        Ok(StatusCode(204));
+        return NoContent();
     }
     /// <summary>
     /// Http request to get paginated list of entities
