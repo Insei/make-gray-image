@@ -17,9 +17,8 @@ public class CreateImageConvertTaskValidator : AbstractValidator<LocalImageConve
     public CreateImageConvertTaskValidator(IGenericRepository repository)
     {
         _repository = repository;
-
         RuleFor(d => d.ImageId)
-            .Must(IsImageExist).WithMessage("Image with this ID {PropertyName} does not exist");
+            .Must(IsImageExist).WithMessage("Image with this ID {PropertyValue} does not exist");
     }
     /// <summary>
     /// Checking for the existence of an image
