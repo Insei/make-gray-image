@@ -41,7 +41,7 @@ public class ImageService
     {
         
         if (objFile.Length == 0) return new LocalImageDTO();
-        var systemImage = await ConvertToSystemImageFormat(objFile);
+        var systemImage = ConvertToSystemImageFormat(objFile);
         var uploadImage = new LocalImage
         {
             Name = objFile.FileName,
@@ -73,8 +73,7 @@ public class ImageService
     public async Task Delete(Guid id)
     {
         var image = await _repository.GetById<LocalImage>(id);
-        if(image == null) throw new BadHttpRequestException("Entity not found"); 
-        _repository.Delete(image);
+        if(image != null) _repository.Delete(image); 
     }
 
     /// <summary>
@@ -122,13 +121,13 @@ public class ImageService
     /// <param name="image">image file</param>
     /// <returns>Image format file</returns>
     [System.Runtime.Versioning.SupportedOSPlatform("windows")]
-    private static Task <Image> ConvertToSystemImageFormat(IFormFile image)
+    private static Image ConvertToSystemImageFormat(IFormFile image)
     {
         using (var memoryStream = new MemoryStream())
         { 
             image.CopyTo(memoryStream);
             var img = Image.FromStream(memoryStream);
-            return Task.FromResult(img);
+            return img;
         }
     }
     /// <summary>
