@@ -96,21 +96,15 @@ public class LocalImageController : Controller
     public async Task<IActionResult> Download(Guid id)
     {
         var imageExtension = _service.GetById(id).Result?.Extension;
-        if (imageExtension == null) return BadRequest();
-        try
+        if (imageExtension == null) return BadRequest(StatusCode(404));
+       
+        var byteImage = await _service.GetImageByte(id);
+        if (imageExtension.ToLower().Contains("jpeg") || imageExtension.ToLower().Contains("jpg"))
         {
-            var byteImage = await _service.GetImageByte(id);
-            if (imageExtension.ToLower().Contains("jpeg") || imageExtension.ToLower().Contains("jpg"))
-            {
-                if (byteImage != null) return Ok(File(byteImage, "image/jpeg"));
-            }
-
-            if (byteImage != null) return Ok(File(byteImage, "image/png"));
+            if (byteImage != null) return Ok(File(byteImage, "image/jpeg"));
         }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
-        throw new InvalidOperationException();
+        if (byteImage != null) return Ok(File(byteImage, "image/png"));
+   
+        return BadRequest();
     }
 }

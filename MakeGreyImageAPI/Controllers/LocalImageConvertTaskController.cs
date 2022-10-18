@@ -39,14 +39,7 @@ public class LocalImageConvertTaskController : Controller
     public async Task<ActionResult<LocalImageConvertTaskDTO>> Add([FromBody] LocalImageConvertTaskCreateDTO? imageConvertTask)
     {
         if (imageConvertTask == null) return BadRequest();
-        try
-        {
-            return Ok(await _imageConvertService.Create(imageConvertTask));
-        }
-        catch(Exception e)
-        {
-            return BadRequest(e.Message);
-        }
+        return Ok(await _imageConvertService.Create(imageConvertTask));
     }
     /// <summary>
     /// Http request to get an entity by Id
