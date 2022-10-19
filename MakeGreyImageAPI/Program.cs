@@ -7,8 +7,10 @@ using MakeGreyImageAPI.Services;
 using Microsoft.EntityFrameworkCore;
 using FluentValidation.AspNetCore;
 using FluentValidation;
+using MakeGreyImageAPI.Loggers;
 using MakeGreyImageAPI.Middlewares;
 using Microsoft.OpenApi.Models;
+using ILogger = MakeGreyImageAPI.Interfaces.ILogger;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +23,7 @@ builder.Services.AddSingleton<IImageManager, ImageManager>();
 builder.Services.AddSingleton<IGenericRepository, GenericRepository>();
 builder.Services.AddSingleton<ImageService>();
 builder.Services.AddSingleton<LocalImageConvertTaskService>();
+builder.Services.AddSingleton<ILogger, SerilogLogger>();
 
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddFluentValidationClientsideAdapters();
@@ -70,4 +73,5 @@ app.UseAuthorization();
 SeedDataDb.Initialize(app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope().ServiceProvider);
 app.MapControllers();
 app.UseMiddleware<ErrorHandlerMiddleware>();
+app.UseMiddleware<LoggerMiddleware>();
 app.Run();
