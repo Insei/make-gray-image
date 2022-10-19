@@ -1,5 +1,3 @@
-using System.Net;
-
 namespace MakeGreyImageAPI.Middlewares;
 /// <summary>
 /// Middleware for global error handling
