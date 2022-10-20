@@ -24,9 +24,18 @@ public class SerilogLogger : MakeGreyImageAPI.Interfaces.ILogger
     /// <summary>
     /// Method for logging
     /// </summary>
-    /// <param name="message">message that we write</param>
+    /// <param name="message">Message that we write</param>
     public void Log(string message)
     {
         _logger.Write(LogEventLevel.Debug, message);
+    }
+    /// <summary>
+    /// Method for logging errors
+    /// </summary>
+    /// <param name="ex">Extension</param>
+    /// <param name="message">Message</param>
+    public void LogError(Exception ex, string message)
+    {
+        _logger.Write(LogEventLevel.Error, message);
     }
 }
