@@ -9,14 +9,14 @@ using Microsoft.AspNetCore.Http;
 namespace MakeGreyImageAPI.Managers;
 
 /// <summary>
-/// class ImageManager for working with images
+/// Class ImageManager for working with images
 /// </summary>
 public class ImageManager : IImageManager
 {
     /// <summary>
     /// A method for converting an image to black and white format
     /// </summary>
-    /// <param name="image">parameter of the received image</param>
+    /// <param name="image">Parameter of the received image</param>
     /// <returns>Return image in byte array format</returns>
     [System.Runtime.Versioning.SupportedOSPlatform("windows")]
     public async Task<byte[]> ConvertToGrey(LocalImage image) 
