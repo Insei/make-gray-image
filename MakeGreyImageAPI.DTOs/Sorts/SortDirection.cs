@@ -5,11 +5,11 @@ namespace MakeGreyImageAPI.DTOs.Sorts;
 public enum SortDirection
 {
     /// <summary>
-    /// sort in descending order
+    /// Sort in descending order
     /// </summary>
     Desc,
     /// <summary>
-    /// sort in ascending order
+    /// Sort in ascending order
     /// </summary>
     Asc
 }

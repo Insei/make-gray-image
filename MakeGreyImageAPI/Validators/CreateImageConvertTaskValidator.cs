@@ -23,8 +23,8 @@ public class CreateImageConvertTaskValidator : AbstractValidator<LocalImageConve
     /// <summary>
     /// Checking for the existence of an image
     /// </summary>
-    /// <param name="id">image Id</param>
-    /// <returns>boolean</returns>
+    /// <param name="id">Image Id</param>
+    /// <returns>Boolean</returns>
     private bool IsImageExist(Guid id)
     {
         return _repository.GetById<LocalImage>(id).Result != null;
