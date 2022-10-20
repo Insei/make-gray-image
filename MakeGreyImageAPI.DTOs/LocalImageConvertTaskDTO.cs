@@ -1,5 +1,7 @@
 namespace MakeGreyImageAPI.DTOs;
-
+/// <summary>
+/// Entity dto of local image for converting task
+/// </summary>
 public class LocalImageConvertTaskDTO 
 {
     /// <summary>
@@ -15,11 +17,11 @@ public class LocalImageConvertTaskDTO
     /// </summary>
     public Guid? OutImageId { get; set; }
     /// <summary>
-    /// image parameters(color, extension)
+    /// Image parameters(color, extension)
     /// </summary>
     public ConvertParameters? Parameters { get; set; }
     /// <summary>
-    /// image conversion status
+    /// Image conversion status
     /// </summary>
     public string Status { get; set; } = "";
 }

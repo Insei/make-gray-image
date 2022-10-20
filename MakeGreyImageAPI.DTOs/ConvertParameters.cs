@@ -1,13 +1,17 @@
+using System.ComponentModel.DataAnnotations;
 namespace MakeGreyImageAPI.DTOs;
-
+/// <summary>
+/// The class of required parameters during conversion
+/// </summary>
 public class ConvertParameters
 {
+    
     /// <summary>
-    /// image extension
+    /// Image extension
     /// </summary>
     public string Extension { get; set; } = "";
     /// <summary>
-    /// image color
+    /// Image color
     /// </summary>
     public string Color { get; set; } = "";
 }
