@@ -35,6 +35,16 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Make grey image API", Version = "v1" });
+    
+    //Determine base path for the application.
+    var basePath = AppContext.BaseDirectory;
+
+    //Set the comments path for the swagger json and ui.
+    var xmlPath = Path.Combine( basePath, "MakeGreyImageAPI.xml"); 
+    var xmlPathDto = Path.Combine( basePath, "MakeGreyImageAPI.DTOs.xml"); 
+    c.IncludeXmlComments(xmlPathDto);
+    c.IncludeXmlComments(xmlPath);
+    
 });
 
 //it is necessary for requests from the host locale,
@@ -55,6 +65,7 @@ var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
+    app.UseStaticFiles();
     app.UseSwagger();
     app.UseSwaggerUI();
 }
