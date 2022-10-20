@@ -30,8 +30,10 @@ public class LocalImageConvertTaskController : Controller
     /// <summary>
     /// Http request to add data to DB
     /// </summary>
-    /// <param name="imageConvertTask"></param>
-    /// <returns>image information</returns>
+    /// <param name="imageConvertTask">Entity of LocalImageConvertTask</param>
+    /// <returns>Image information</returns>
+    /// <response code="200">Returns the newly created item</response>
+    /// <response code="400">If the item is null</response>
     [HttpPost]
     public async Task<ActionResult<LocalImageConvertTaskDTO>> Add([FromBody] LocalImageConvertTaskCreateDTO? imageConvertTask)
     {
@@ -41,8 +43,9 @@ public class LocalImageConvertTaskController : Controller
     /// <summary>
     /// Http request to get an entity by Id
     /// </summary>
-    /// <param name="id">entity ID</param>
-    /// <returns>image entity</returns>
+    /// <param name="id">Entity ID</param>
+    /// <returns>Image entity</returns>
+    /// <response code="200">Returns the found item</response>
     [HttpGet("{id}")]
     public async Task<ActionResult> GetById(Guid id)
     {
@@ -52,7 +55,8 @@ public class LocalImageConvertTaskController : Controller
     /// <summary>
     /// Http request to remove an entity from DB
     /// </summary>
-    /// <param name="id">entity ID</param>
+    /// <param name="id">Entity ID</param>
+    /// <response code="204">Item successfully deleted</response>
     [HttpDelete("{id}")]
     public async Task<ActionResult> Delete([FromQuery]Guid id)
     {
@@ -62,11 +66,11 @@ public class LocalImageConvertTaskController : Controller
     /// <summary>
     /// Http request to get paginated list of entities
     /// </summary>
-    /// <param name="pageNumber">the number of the displayed page</param>
-    /// <param name="pageSize">number of items per page</param>
-    /// <param name="orderBy">name of the sorting field</param>
-    /// <param name="orderDirection">order direction</param>
-    /// <param name="search">search string parameter</param>
+    /// <param name="pageNumber">The number of the displayed page</param>
+    /// <param name="pageSize">Number of items per page</param>
+    /// <param name="orderBy">Name of the sorting field</param>
+    /// <param name="orderDirection">Order direction</param>
+    /// <param name="search">Search string parameter</param>
     /// <returns>PaginatedResult list of LocalImageConvertTaskDTO entities</returns>
     [HttpGet("list")]
     public async Task<PaginatedResult<List<LocalImageConvertTaskDTO>>> GetList([FromQuery] int pageNumber = 0, 

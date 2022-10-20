@@ -13,7 +13,7 @@ public sealed class DataDbContext : DbContext
     /// <summary>
     /// Constructor of DataDbContext
     /// </summary>
-    /// <param name="options"> data base context options of DataDbContext type</param>
+    /// <param name="options"> Data base context options of DataDbContext type</param>
     public DataDbContext(DbContextOptions<DataDbContext> options) : base(options) {
         
     }
@@ -30,7 +30,7 @@ public sealed class DataDbContext : DbContext
     /// <summary>
     /// Method for using the fluent api functionality
     /// </summary>
-    /// <param name="builder">parameter of ModelBuilder class</param>
+    /// <param name="builder">Parameter of ModelBuilder class</param>
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);

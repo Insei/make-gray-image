@@ -1,27 +1,27 @@
 namespace MakeGreyImageAPI.Entities;
 
 /// <summary>
-/// entity of local image for converting task
+/// Entity of local image for converting task
 /// </summary>
 public class LocalImageConvertTask
 {
     /// <summary>
-    /// unique identifier of entity
+    /// Unique identifier of entity
     /// </summary>
     public Guid Id { get; set; }
     
     /// <summary>
-    /// unique identifier of original image
+    /// Unique identifier of original image
     /// </summary>
     public Guid InImageId { get; set; }
     
     /// <summary>
-    ///  unique identifier of converted image
+    ///  Unique identifier of converted image
     /// </summary>
     public Guid? OutImageId { get; set; }
 
     /// <summary>
-    /// converting status
+    /// Converting status
     /// </summary>
     public string ConvertStatus { get; set; } = "";
 }
