@@ -34,7 +34,7 @@ public class ImageService
     /// <summary>
     /// Create a new entity of image
     /// </summary>
-    /// <param name="objFile">the image received from the request</param>
+    /// <param name="objFile">The image received from the request</param>
     /// <returns>DTO of image</returns>
     [System.Runtime.Versioning.SupportedOSPlatform("windows")]
     public async Task <LocalImageDTO> Create(IFormFile objFile)
@@ -58,7 +58,7 @@ public class ImageService
     /// <summary>
     /// Get DTO Entity by ID
     /// </summary>
-    /// <param name="id">entity ID</param>
+    /// <param name="id">Entity ID</param>
     /// <returns>DTO of image</returns>
     public async Task<LocalImageDTO?> GetById(Guid id)
     {
@@ -69,7 +69,7 @@ public class ImageService
     /// <summary>
     /// Delete Entity
     /// </summary>
-    /// <param name="id">entity ID</param>
+    /// <param name="id">Entity ID</param>
     public async Task Delete(Guid id)
     {
         var image = await _repository.GetById<LocalImage>(id);
@@ -79,12 +79,12 @@ public class ImageService
     /// <summary>
     /// Get paginated Entity List 
     /// </summary>
-    /// <param name="pageNumber">page number</param>
-    /// <param name="pageSize">page size</param>
-    /// <param name="orderBy">sorting</param>
-    /// <param name="orderDirection">sorting direction</param>
-    /// <param name="search">search string</param>
-    /// <returns>paginated list of entities</returns>
+    /// <param name="pageNumber">Page number</param>
+    /// <param name="pageSize">Page size</param>
+    /// <param name="orderBy">Sorting</param>
+    /// <param name="orderDirection">Sorting direction</param>
+    /// <param name="search">Search string</param>
+    /// <returns>Paginated list of entities</returns>
     public async Task<PaginatedResult<List<LocalImageDTO>>> GetPaginatedList(int pageNumber = 0, int pageSize = 0,
         string orderBy = "", SortDirection orderDirection = SortDirection.Asc, string search = "")
     {
@@ -104,8 +104,8 @@ public class ImageService
     /// <summary>
     /// Convert IFormFile format file to byte
     /// </summary>
-    /// <param name="image">image file</param>
-    /// <returns>image in byte format</returns>
+    /// <param name="image">Image file</param>
+    /// <returns>Image in byte format</returns>
     private static byte[]? ConvertToBytes(IFormFile image)
     {
         if (image.Length <= 0) return null;
@@ -118,7 +118,7 @@ public class ImageService
     /// <summary>
     /// Convert IFormFile file to Image 
     /// </summary>
-    /// <param name="image">image file</param>
+    /// <param name="image">Image file</param>
     /// <returns>Image format file</returns>
     [System.Runtime.Versioning.SupportedOSPlatform("windows")]
     private static Image ConvertToSystemImageFormat(IFormFile image)
@@ -133,8 +133,8 @@ public class ImageService
     /// <summary>
     /// Get image in byte format
     /// </summary>
-    /// <param name="id">entity ID</param>
-    /// <returns>image in byte format</returns>
+    /// <param name="id">Entity ID</param>
+    /// <returns>Image in byte format</returns>
     public async Task<byte[]?> GetImageByte(Guid id)
     {
         var image = await _repository.GetById<LocalImage>(id);

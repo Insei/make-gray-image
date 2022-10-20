@@ -2,34 +2,34 @@ using System.Linq.Expressions;
 
 namespace MakeGreyImageAPI.Persistance;
 /// <summary>
-/// class which constructs LINQ predicates piece by piece
+/// Class which constructs LINQ predicates piece by piece
 /// </summary>
 public class PredicateBuilder
 {
     /// <summary>
-    ///  method for creating an Expression that initially evaluates true
+    /// Method for creating an Expression that initially evaluates true
     /// </summary>
-    /// <typeparam name="T">entity type</typeparam>
-    /// <returns>expression</returns>
+    /// <typeparam name="T">Entity type</typeparam>
+    /// <returns>Expression</returns>
     public static Expression<Func<T, bool>> True<T>()
     {
         return _ => true;
     }
     /// <summary>
-    /// method for creating an Expression that initially evaluates true
+    /// Method for creating an Expression that initially evaluates true
     /// </summary>
-    /// <typeparam name="T">entity type</typeparam>
-    /// <returns>expression</returns>
+    /// <typeparam name="T">Entity type</typeparam>
+    /// <returns>Expression</returns>
     public static Expression<Func<T, bool>> False<T>()
     {
         return _ => false;
     }
     /// <summary>
-    /// class implements a keyword search
+    /// Class implements a keyword search
     /// </summary>
-    /// <param name="keyword">searching keyword</param>
-    /// <typeparam name="T">entity type</typeparam>
-    /// <returns>expression</returns>
+    /// <param name="keyword">Searching keyword</param>
+    /// <typeparam name="T">Entity type</typeparam>
+    /// <returns>Expression</returns>
     public static Expression<Func<T, bool>> PredicateSearchInAllFields<T>(string keyword)
     {
         var predicate = False<T>();
@@ -50,11 +50,11 @@ public class PredicateBuilder
         return predicate;
     }
     /// <summary>
-    /// wrapping in a new lambda expression
+    /// Wrapping in a new lambda expression
     /// </summary>
-    /// <param name="propertyName">property name</param>
-    /// <typeparam name="T">entity type</typeparam>
-    /// <returns>expression</returns>
+    /// <param name="propertyName">Property name</param>
+    /// <typeparam name="T">Entity type</typeparam>
+    /// <returns>Expression</returns>
     public static Expression<Func<T, object>>? ToLambda<T>(string propertyName)
     {
         // if (typeof(T)
@@ -71,10 +71,10 @@ public class PredicateBuilder
     /// <summary>
     /// Or conditions method
     /// </summary>
-    /// <param name="expr1">first expression</param>
-    /// <param name="expr2">second expression</param>
-    /// <typeparam name="T">entity type</typeparam>
-    /// <returns>expression</returns>
+    /// <param name="expr1">First expression</param>
+    /// <param name="expr2">Second expression</param>
+    /// <typeparam name="T">Entity type</typeparam>
+    /// <returns>Expression</returns>
     public static Expression<Func<T, bool>> Or<T>(Expression<Func<T, bool>> expr1, Expression<Func<T, bool>> expr2)
     {
         var invokedExpr = Expression.Invoke(expr2, expr1.Parameters.Cast<Expression>());
@@ -83,10 +83,10 @@ public class PredicateBuilder
     /// <summary>
     /// And conditions method
     /// </summary>
-    /// <param name="expr1">first expression</param>
-    /// <param name="expr2">second expression</param>
-    /// <typeparam name="T">entity type</typeparam>
-    /// <returns>expression</returns>
+    /// <param name="expr1">First expression</param>
+    /// <param name="expr2">Second expression</param>
+    /// <typeparam name="T">Entity type</typeparam>
+    /// <returns>Expression</returns>
     public static Expression<Func<T, bool>> And<T>(Expression<Func<T, bool>> expr1, Expression<Func<T, bool>> expr2)
     {
         var invokedExpr = Expression.Invoke(expr2, expr1.Parameters.Cast<Expression>());
