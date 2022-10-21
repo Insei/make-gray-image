@@ -36,10 +36,10 @@ public class ErrorHandlerMiddleware
         catch (Exception ex)
         {
             
-            _logger.LogError(ex, $"An unhandled exception has occurred while executing the request. Url: " +
-                                 $"{context.Request.GetDisplayUrl()}. Request Data: " + GetRequestData(context));
+            _logger.LogError(ex, "An unhandled exception has occurred while executing the request.\n" +
+                                 "\tUrl: "+ $"{context.Request.GetDisplayUrl()}.\n " +
+                                 "\tRequest Data: " + GetRequestData(context));
             
-            // // TODO: add logging 
             var response = context.Response;
             response.StatusCode = StatusCodes.Status500InternalServerError;
         }
@@ -53,16 +53,16 @@ public class ErrorHandlerMiddleware
     {
         var sb = new StringBuilder();
 
-        if (context.Request.HasFormContentType && context.Request.Form.Any())
+        if (context.Request.Query.Any())
         {
-            sb.Append("Form variables:");
-            foreach (var x in context.Request.Form)
+            sb.Append("\n\tQuery variables:\n");
+            foreach (var (key, value) in context.Request.Query)
             {
-                sb.AppendFormat("Key={0}, Value={1}<br/>", x.Key, x.Value);
+                sb.Append($"\t\tKey={key}, Value={value}\n");
             }
         }
 
-        sb.AppendLine("Method: " + context.Request.Method);
+        sb.AppendLine("\tMethod: " + context.Request.Method);
 
         return sb.ToString();
     }
