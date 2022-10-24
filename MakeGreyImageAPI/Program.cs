@@ -7,8 +7,11 @@ using MakeGreyImageAPI.Services;
 using Microsoft.EntityFrameworkCore;
 using FluentValidation.AspNetCore;
 using FluentValidation;
+using MakeGreyImageAPI.Entities;
 using MakeGreyImageAPI.Loggers;
 using MakeGreyImageAPI.Middlewares;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using ILogger = MakeGreyImageAPI.Interfaces.ILogger;
 
@@ -17,6 +20,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<DataDbContext>(options =>
     options.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=ImageBase;Trusted_Connection=True;"), ServiceLifetime.Singleton);
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
+builder.Services.AddIdentity<ApplicationUser, IdentityRole<Guid>>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddEntityFrameworkStores<DataDbContext>();
 
 // We use asynchronous conversion which continues after the request is executed
 builder.Services.AddSingleton<IImageManager, ImageManager>();
@@ -29,6 +34,19 @@ builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddFluentValidationClientsideAdapters();
 builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    // Password settings.
+    options.Password.RequireDigit = true;
+    options.Password.RequireLowercase = true;
+    options.Password.RequireNonAlphanumeric = true;
+    options.Password.RequireUppercase = true;
+
+    // User settings.
+    options.User.AllowedUserNameCharacters =
+        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+    options.User.RequireUniqueEmail = false;
+});
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
