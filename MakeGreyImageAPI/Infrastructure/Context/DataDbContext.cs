@@ -1,4 +1,6 @@
 using MakeGreyImageAPI.DTOs;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace MakeGreyImageAPI.Infrastructure.Context;
 
@@ -8,7 +10,8 @@ using MakeGreyImageAPI.Entities;
 /// <summary>
 /// Derived class from dbcontext for working with data
 /// </summary>
-public sealed class DataDbContext : DbContext
+public sealed class DataDbContext : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid, IdentityUserClaim<Guid>,
+    IdentityUserRole<Guid>, IdentityUserLogin<Guid>, IdentityRoleClaim<Guid>, IdentityUserToken<Guid>>
 {
     /// <summary>
     /// Constructor of DataDbContext
@@ -26,13 +29,4 @@ public sealed class DataDbContext : DbContext
     /// A data set through which we can interact with tables from the database
     /// </summary>
     public DbSet<LocalImageConvertTask>? LocalImagesConvertTask { get; set; }
-
-    /// <summary>
-    /// Method for using the fluent api functionality
-    /// </summary>
-    /// <param name="builder">Parameter of ModelBuilder class</param>
-    protected override void OnModelCreating(ModelBuilder builder)
-    {
-        base.OnModelCreating(builder);
-    }
 }
