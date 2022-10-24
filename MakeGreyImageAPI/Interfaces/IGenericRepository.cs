@@ -18,7 +18,7 @@ public interface IGenericRepository
     /// Get entity by ID
     /// </summary>
     /// <param name="id">Entity ID</param>
-    /// <returns>entity</returns>
+    /// <returns>Entity</returns>
     public Task<TEntity?> GetById<TEntity>(Guid id) where TEntity : class;
     
     /// <summary>

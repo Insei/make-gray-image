@@ -1,23 +1,23 @@
 namespace MakeGreyImageAPI.DTOs;
 /// <summary>
-/// entity dto with information for updating user
+/// Entity dto with information for updating user
 /// </summary>
 public class ApplicationUserUpdateDto 
 {
     /// <summary>
-    /// user name
+    /// User name
     /// </summary>
     public string Name { get; set; } = "";
     /// <summary>
-    /// user lastname
+    /// User lastname
     /// </summary>
     public string LastName { get; set; } = "";
     /// <summary>
-    /// user e-mail
+    /// User e-mail
     /// </summary>
     public string Email { get; set; } = "";
     /// <summary>
-    /// user phone number
+    /// User phone number
     /// </summary>
     public string PhoneNumber { get; set; } = "";
 }

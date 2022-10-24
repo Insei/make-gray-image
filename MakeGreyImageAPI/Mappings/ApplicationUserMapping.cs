@@ -4,11 +4,11 @@ using MakeGreyImageAPI.Entities;
 
 namespace MakeGreyImageAPI.Mappings;
 /// <summary>
-/// mapper of ApplicationUser entities
+/// Mapper of ApplicationUser entities
 /// </summary>
 public class ApplicationUserMapping :Profile
 {   /// <summary>
-    /// constructor of ApplicationUserMapping class
+    /// Constructor of ApplicationUserMapping class
     /// </summary>
     public ApplicationUserMapping()
     {

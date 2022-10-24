@@ -1,7 +1,7 @@
 namespace MakeGreyImageAPI.Infrastructure.Context;
 
 /// <summary>
-/// class for working with data initialisation
+/// Class for working with data initialisation
 /// </summary>
 public class SeedDataDb
 {

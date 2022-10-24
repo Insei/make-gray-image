@@ -13,7 +13,7 @@ public class LoggerMiddleware
     /// LoggerMiddleware constructor
     /// </summary>
     /// <param name="next">RequestDelegate</param>
-    /// <param name="logger">logger implementation</param>
+    /// <param name="logger">Logger implementation</param>
     public LoggerMiddleware(RequestDelegate next, Interfaces.ILogger logger)
     {
         _next = next;
@@ -39,7 +39,7 @@ public class LoggerMiddleware
         }
         catch 
         {
-          //ignore
+          //Ignore
         }
         var originalResponseBody = context.Response.Body;
         await using var newResponseBody = new MemoryStream();
@@ -59,7 +59,7 @@ public class LoggerMiddleware
         }
         catch 
         {
-            //ignore
+            //Ignore
         }
         
         newResponseBody.Seek(0, SeekOrigin.Begin);

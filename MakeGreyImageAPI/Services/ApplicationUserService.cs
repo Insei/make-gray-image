@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MakeGreyImageAPI.Services;
 /// <summary>
-/// service for working with user entity
+/// Service for working with user entity
 /// </summary>
 public class ApplicationUserService
 {
@@ -21,7 +21,7 @@ public class ApplicationUserService
     // private readonly RoleManager<IdentityRole<Guid>> _roleManager;
     private readonly IMapper _mapper;
    /// <summary>
-   /// constructor of ApplicationUserService class
+   /// Constructor of ApplicationUserService class
    /// </summary>
    /// <param name="userManager">UserManager</param>
    /// <param name="mapper">IMapper</param>
@@ -35,7 +35,7 @@ public class ApplicationUserService
         _repository = repository;
     }
     /// <summary>
-    /// create a new entity of user
+    /// Create a new entity of user
     /// </summary>
     /// <param name="appUserCreateDto">DTO for creating user</param>
     /// <returns>ApplicationUserDto</returns>
@@ -49,10 +49,10 @@ public class ApplicationUserService
         return _mapper.Map<ApplicationUserDto>(appUser);
     }
     /// <summary>
-    /// update ApplicationUser entity
+    /// Update ApplicationUser entity
     /// </summary>
-    /// <param name="updateDto">new entity for updating</param>
-    /// <param name="id">entity ID</param>
+    /// <param name="updateDto">New entity for updating</param>
+    /// <param name="id">Entity ID</param>
     /// <returns>ApplicationUserDto</returns>
     public async Task<ApplicationUserDto?> Update(ApplicationUserUpdateDto updateDto, Guid id)
     {
@@ -64,18 +64,18 @@ public class ApplicationUserService
         return _mapper.Map<ApplicationUserDto>(updatedUser);
     }
     /// <summary>
-    /// delete Entity
+    /// Delete Entity
     /// </summary>
-    /// <param name="id">entity Id</param>
+    /// <param name="id">Entity Id</param>
     public async Task Delete(Guid id)
     {
         var user = await _userManager.FindByIdAsync(id.ToString());
         if(user != null)  await _userManager.DeleteAsync(user);
     }
     /// <summary>
-    /// get DTO Entity by ID
+    /// Get DTO Entity by ID
     /// </summary>
-    /// <param name="id">entity Id</param>
+    /// <param name="id">Entity Id</param>
     /// <returns>ApplicationUserDto</returns>
     public async Task<ApplicationUserDto?> GetById(Guid id)
     {
@@ -84,14 +84,14 @@ public class ApplicationUserService
     }
 
     /// <summary>
-    /// get paginated entity list
+    /// Get paginated entity list
     /// </summary>
-    /// <param name="pageNumber">page number</param>
-    /// <param name="pageSize">page size</param>
-    /// <param name="orderBy">sorting</param>
-    /// <param name="orderDirection">sorting direction</param>
-    /// <param name="search">search string</param>
-    /// <returns>paginated list of entities</returns>
+    /// <param name="pageNumber">Page number</param>
+    /// <param name="pageSize">Page size</param>
+    /// <param name="orderBy">Sorting</param>
+    /// <param name="orderDirection">Sorting direction</param>
+    /// <param name="search">Search string</param>
+    /// <returns>Paginated list of entities</returns>
     public async Task<PaginatedResult<List<ApplicationUserDto>>> GetPaginatedList(int pageNumber = 0, int pageSize = 0,
         string orderBy = "", SortDirection orderDirection = SortDirection.Asc, string search = "")
     {

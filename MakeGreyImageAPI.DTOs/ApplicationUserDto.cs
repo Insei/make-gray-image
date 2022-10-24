@@ -1,41 +1,39 @@
 namespace MakeGreyImageAPI.DTOs;
 /// <summary>
-/// entity dto with information about user
+/// Entity dto with information about user
 /// </summary>
 public class ApplicationUserDto
 {
     /// <summary>
-    /// user Id
+    /// User Id
     /// </summary>
     public Guid Id { get; set; }
     /// <summary>
-    /// user login name
+    /// User login name
     /// </summary>
     public string UserName { get; set; } = "";
     /// <summary>
-    /// user name
+    /// User name
     /// </summary>
     public string Name { get; set; } = "";
     /// <summary>
-    /// user lastname
+    /// User lastname
     /// </summary>
     public string LastName { get; set; } = "";
     /// <summary>
-    /// profile creation time
+    /// Profile creation time
     /// </summary>
     public DateTime Created { get; set; }
     /// <summary>
-    /// profile update time
+    /// Profile update time
     /// </summary>
     public DateTime? Updated { get; set; }
-
     /// <summary>
-    /// user e-mail
+    /// User e-mail
     /// </summary>
     public string Email { get; set; } = "";
-
     /// <summary>
-    /// user phone number
+    /// User phone number
     /// </summary>
     public string PhoneNumber { get; set; } = "";
 
