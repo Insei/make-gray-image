@@ -25,11 +25,11 @@ public class CreateApplicationUserValidator : AbstractValidator<ApplicationUserC
             .Must((d, _) => PasswordIsValid(d.Password, out message)).WithMessage(_ => message);
     }
     /// <summary>
-    /// method for verifying the user's password
+    /// Method for verifying the user's password
     /// </summary>
-    /// <param name="password">user password</param>
-    /// <param name="errorMessage">message with error text</param>
-    /// <returns>boolean</returns>
+    /// <param name="password">User password</param>
+    /// <param name="errorMessage">Message with error text</param>
+    /// <returns>Boolean</returns>
     private bool PasswordIsValid(string password, out string errorMessage)
     {
         var _passwordErrors = new List<string>();

@@ -7,19 +7,19 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MakeGreyImageAPI.Infrastructure.Generics;
 /// <summary>
-/// generalized Repository class type 
+/// Generalized Repository class type 
 /// </summary>
 public class GenericRepository : IGenericRepository
 {
     /// <summary>
-    /// context of DB Context
+    /// Context of DB Context
     /// </summary>
     private readonly DataDbContext _dbContext;
 
     /// <summary>
     /// Constructor of GenericRepository
     /// </summary>
-    /// <param name="dbContext">parameter of DataDbContext</param>
+    /// <param name="dbContext">Parameter of DataDbContext</param>
     public GenericRepository(DataDbContext dbContext)
     {
         _dbContext = dbContext;
@@ -51,8 +51,8 @@ public class GenericRepository : IGenericRepository
     /// <summary>
     /// Delete Entity
     /// </summary>
-    /// <param name="entity">deleting entity</param>
-    /// <typeparam name="TEntity">entity type</typeparam>
+    /// <param name="entity">Deleting entity</param>
+    /// <typeparam name="TEntity">Entity type</typeparam>
     public async void Delete<TEntity>(TEntity entity) where TEntity : class
     {
         _dbContext.Set<TEntity>().Remove(entity); 
@@ -61,9 +61,9 @@ public class GenericRepository : IGenericRepository
     /// <summary>
     /// Updating entity
     /// </summary>
-    /// <param name="entity">new entity for updating</param>
-    /// <typeparam name="TEntity">entity type</typeparam>
-    /// <returns>updated entity</returns>
+    /// <param name="entity">New entity for updating</param>
+    /// <typeparam name="TEntity">Entity type</typeparam>
+    /// <returns>Updated entity</returns>
     public async Task<TEntity> Update<TEntity>(TEntity entity) where TEntity : class
     {
         _dbContext.Set<TEntity>().Attach(entity);
@@ -74,13 +74,13 @@ public class GenericRepository : IGenericRepository
     /// <summary>
     /// Get entity list
     /// </summary>
-    /// <param name="expression">filter</param>
-    /// <param name="orderBy">sorting</param>
-    /// <param name="includes">includes</param>
-    /// <param name="page">current page</param>
-    /// <param name="pageSize">page size</param>
-    /// <typeparam name="TEntity">entity type</typeparam>
-    /// <returns>list of entities</returns>
+    /// <param name="expression">Filter</param>
+    /// <param name="orderBy">Sorting</param>
+    /// <param name="includes">Includes</param>
+    /// <param name="page">Current page</param>
+    /// <param name="pageSize">Page size</param>
+    /// <typeparam name="TEntity">Entity type</typeparam>
+    /// <returns>List of entities</returns>
     public async Task<IEnumerable<TEntity>> GetPaginatedList<TEntity>(Expression<Func<TEntity, bool>>? expression = null, 
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null, Func<IQueryable<TEntity>, 
             IQueryable<TEntity>>? includes = null, int page = 0, int pageSize = 0) where TEntity : class
@@ -100,15 +100,15 @@ public class GenericRepository : IGenericRepository
         return await query.ToListAsync();
     }
     /// <summary>
-    /// Get Entity List (search in all fields)
+    /// Get entity list (search in all fields)
     /// </summary>
-    /// <param name="search">search string</param>
-    /// <param name="orderBy">sorting</param>
-    /// <param name="orderDirection">sorting direction</param>
-    /// <param name="page">current page</param>
-    /// <param name="pageSize">page size</param>
-    /// <typeparam name="TEntity">entity type</typeparam>
-    /// <returns>list of entities</returns>
+    /// <param name="search">Search string</param>
+    /// <param name="orderBy">Sorting</param>
+    /// <param name="orderDirection">Sorting direction</param>
+    /// <param name="page">Current page</param>
+    /// <param name="pageSize">Page size</param>
+    /// <typeparam name="TEntity">Entity type</typeparam>
+    /// <returns>List of entities</returns>
     public async Task<IEnumerable<TEntity>> GetPaginatedList<TEntity>(string search = "", string orderBy = "",
         SortDirection orderDirection = SortDirection.Asc, int page = 0, int pageSize = 0) where TEntity : class
     {
@@ -144,9 +144,9 @@ public class GenericRepository : IGenericRepository
     /// <summary>
     /// Count Elements with specified filter
     /// </summary>
-    /// <param name="expression">filter</param>
-    /// <typeparam name="TEntity">entity type</typeparam>
-    /// <returns>number of entities</returns>
+    /// <param name="expression">Filter</param>
+    /// <typeparam name="TEntity">Entity type</typeparam>
+    /// <returns>Number of entities</returns>
     public async Task<int> Count<TEntity>(Expression<Func<TEntity, bool>>? expression = null) where TEntity : class
     {
         if (expression != null)
@@ -156,9 +156,9 @@ public class GenericRepository : IGenericRepository
     /// <summary>
     /// Count Elements with search string (search in all fields)
     /// </summary>
-    /// <param name="search">search string</param>
-    /// <typeparam name="TEntity">entity type</typeparam>
-    /// <returns>number of entities</returns>
+    /// <param name="search">Search string</param>
+    /// <typeparam name="TEntity">Entity type</typeparam>
+    /// <returns>Number of entities</returns>
     public async Task<int> Count<TEntity>(string search) where TEntity : class
     {
         Expression<Func<TEntity, bool>>? filterExpression = null;

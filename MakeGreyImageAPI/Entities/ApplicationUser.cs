@@ -2,24 +2,24 @@ using Microsoft.AspNetCore.Identity;
 
 namespace MakeGreyImageAPI.Entities;
 /// <summary>
-/// entity with information about user
+/// Entity with information about user
 /// </summary>
 public class ApplicationUser : IdentityUser<Guid>
 {
     /// <summary>
-    /// user name
+    /// User name
     /// </summary>
     public string Name { get; set; } = "";
     /// <summary>
-    /// user lastname
+    /// User lastname
     /// </summary>
     public string LastName { get; set; } = "";
     /// <summary>
-    /// profile creation time
+    /// Profile creation time
     /// </summary>
     public DateTime Created { get; set; }
     /// <summary>
-    /// profile update time
+    /// Profile update time
     /// </summary>
     public DateTime? Updated { get; set; }
 }
