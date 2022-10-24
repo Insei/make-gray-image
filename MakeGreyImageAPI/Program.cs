@@ -29,7 +29,7 @@ builder.Services.AddSingleton<IGenericRepository, GenericRepository>();
 builder.Services.AddSingleton<ImageService>();
 builder.Services.AddSingleton<LocalImageConvertTaskService>();
 builder.Services.AddSingleton<ILogger, SerilogLogger>();
-
+builder.Services.AddScoped<ApplicationUserService>();
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddFluentValidationClientsideAdapters();
 builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
