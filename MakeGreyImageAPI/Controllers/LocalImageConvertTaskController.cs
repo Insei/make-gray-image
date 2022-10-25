@@ -2,6 +2,7 @@ using MakeGreyImageAPI.DTOs;
 using MakeGreyImageAPI.DTOs.Results;
 using MakeGreyImageAPI.DTOs.Sorts;
 using MakeGreyImageAPI.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MakeGreyImageAPI.Controllers;
@@ -13,7 +14,7 @@ namespace MakeGreyImageAPI.Controllers;
 [System.Runtime.Versioning.SupportedOSPlatform("windows")]
 [Route("api/imagesConvert/")]
 [ApiController]
-
+[Authorize]
 public class LocalImageConvertTaskController : Controller
 {
     private readonly LocalImageConvertTaskService _imageConvertService;
