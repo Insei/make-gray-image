@@ -3,6 +3,7 @@ using MakeGreyImageAPI.DTOs.Results;
 using MakeGreyImageAPI.DTOs.Sorts;
 using MakeGreyImageAPI.Interfaces;
 using MakeGreyImageAPI.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MakeGreyImageAPI.Controllers;
@@ -13,12 +14,12 @@ namespace MakeGreyImageAPI.Controllers;
 [ApiController]
 public class ApplicationUserController : Controller
 {
-    private readonly ApplicationUserService _service;
+    private readonly ApplicationUserAdminService _service;
     /// <summary>
     /// ApplicationUserController controller
     /// </summary>
     /// <param name="service">ApplicationUserService</param>
-    public ApplicationUserController(ApplicationUserService service)
+    public ApplicationUserController(ApplicationUserAdminService service)
     {
         _service = service;
     }
