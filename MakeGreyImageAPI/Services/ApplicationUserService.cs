@@ -1,22 +1,21 @@
 using AutoMapper;
 using MakeGreyImageAPI.DTOs;
 using MakeGreyImageAPI.Entities;
-using MakeGreyImageAPI.Interfaces;
 using Microsoft.AspNetCore.Identity;
 
 namespace MakeGreyImageAPI.Services;
 /// <summary>
-/// 
+/// Service for working with user entity
 /// </summary>
 public class ApplicationUserService
 {
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IMapper _mapper;
     /// <summary>
-    /// 
+    /// ApplicationUserService constructor
     /// </summary>
-    /// <param name="userManager"></param>
-    /// <param name="mapper"></param>
+    /// <param name="userManager">UserManager</param>
+    /// <param name="mapper">IMapper</param>
     public ApplicationUserService(UserManager<ApplicationUser> userManager, IMapper mapper)
     {
         _userManager = userManager;

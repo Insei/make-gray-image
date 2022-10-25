@@ -3,10 +3,7 @@ using MakeGreyImageAPI.DTOs;
 using MakeGreyImageAPI.DTOs.Results;
 using MakeGreyImageAPI.DTOs.Sorts;
 using MakeGreyImageAPI.Entities;
-using MakeGreyImageAPI.Infrastructure.Context;
 using MakeGreyImageAPI.Interfaces;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
 namespace MakeGreyImageAPI.Services;
 /// <summary>
@@ -14,7 +11,6 @@ namespace MakeGreyImageAPI.Services;
 /// </summary>
 public class ApplicationUserAdminService
 {
-    private readonly UserManager<ApplicationUser> _userManager;
     private readonly IGenericRepository _repository;
     // private readonly SignInManager<ApplicationUser> _signInManager;
     // private readonly RoleManager<IdentityRole<Guid>> _roleManager;
@@ -23,12 +19,10 @@ public class ApplicationUserAdminService
    /// <summary>
    /// Constructor of ApplicationUserService class
    /// </summary>
-   /// <param name="userManager">UserManager</param>
    /// <param name="mapper">IMapper</param>
    /// <param name="repository">IGenericRepository</param>
-    public ApplicationUserAdminService(UserManager<ApplicationUser> userManager, IMapper mapper, IGenericRepository repository)
+    public ApplicationUserAdminService(IMapper mapper, IGenericRepository repository)
     {
-        _userManager = userManager;
         // _signInManager = signInManager;
         // _roleManager = roleManager;
         _mapper = mapper;
