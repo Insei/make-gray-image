@@ -12,8 +12,6 @@ namespace MakeGreyImageAPI.Services;
 public class ApplicationUserAdminService
 {
     private readonly IGenericRepository _repository;
-    // private readonly SignInManager<ApplicationUser> _signInManager;
-    // private readonly RoleManager<IdentityRole<Guid>> _roleManager;
     private readonly IMapper _mapper;
     
    /// <summary>
@@ -23,8 +21,6 @@ public class ApplicationUserAdminService
    /// <param name="repository">IGenericRepository</param>
     public ApplicationUserAdminService(IMapper mapper, IGenericRepository repository)
     {
-        // _signInManager = signInManager;
-        // _roleManager = roleManager;
         _mapper = mapper;
         _repository = repository;
     }
