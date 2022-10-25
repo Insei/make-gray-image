@@ -2,6 +2,7 @@ using MakeGreyImageAPI.DTOs;
 using MakeGreyImageAPI.DTOs.Results;
 using MakeGreyImageAPI.DTOs.Sorts;
 using MakeGreyImageAPI.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MakeGreyImageAPI.Controllers;
@@ -12,7 +13,7 @@ namespace MakeGreyImageAPI.Controllers;
 [System.Runtime.Versioning.SupportedOSPlatform("windows")]
 [Route("api/images/")]
 [ApiController]
-
+[Authorize]
 public class LocalImageController : Controller
 {
     private static ImageService _service = null!;

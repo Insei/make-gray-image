@@ -12,6 +12,7 @@ namespace MakeGreyImageAPI.Controllers;
 /// </summary>
 [Route("api/users/")]
 [ApiController]
+[Authorize]
 public class ApplicationUserController : Controller
 {
     private readonly ApplicationUserAdminService _service;
