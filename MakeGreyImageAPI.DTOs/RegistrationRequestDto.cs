@@ -1,6 +1,6 @@
 namespace MakeGreyImageAPI.DTOs;
 /// <summary>
-/// 
+/// Dto information for user registration
 /// </summary>
 public class RegistrationRequestDto
 {

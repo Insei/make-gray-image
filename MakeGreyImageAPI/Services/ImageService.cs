@@ -16,18 +16,15 @@ public class ImageService
     
     private readonly IGenericRepository _repository;
     private readonly IMapper _mapper;
-    private readonly IImageManager _manager;
     /// <summary>
     /// Constructor of ImageService class
     /// </summary>
     /// <param name="repository">IGenericRepository</param>
     /// <param name="mapper">IMapper</param>
-    /// <param name="manager">IImageManager</param>
-    public ImageService(IGenericRepository repository, IMapper mapper, IImageManager manager)
+    public ImageService(IGenericRepository repository, IMapper mapper)
     {
         _repository = repository;
         _mapper = mapper;
-        _manager = manager;
 
     }
 

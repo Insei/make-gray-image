@@ -7,25 +7,25 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace MakeGreyImageAPI.Services;
 /// <summary>
-/// 
+///  Class for validating user credentials and issuing tokens
 /// </summary>
 public class AuthService
 {
    
     private readonly UserManager<ApplicationUser> _userManager;
     /// <summary>
-    /// 
+    /// AuthService constructor
     /// </summary>
-    /// <param name="userManager"></param>
+    /// <param name="userManager">UserManager</param>
     public AuthService(UserManager<ApplicationUser> userManager)
     {
         _userManager = userManager;
     }
     /// <summary>
-    /// 
+    /// Method for getting JWT token
     /// </summary>
-    /// <param name="login"></param>
-    /// <param name="password"></param>
+    /// <param name="login">User login</param>
+    /// <param name="password">User password</param>
     public async Task<string?> GetToken(string login, string password)
     {
         var claim = await GetClaims(login, password);
@@ -42,11 +42,11 @@ public class AuthService
     }
 
     /// <summary>
-    /// 
+    /// Method for getting user claim for access
     /// </summary>
-    /// <param name="login"></param>
-    /// <param name="password"></param>
-    /// <returns></returns>
+    /// <param name="login">User login</param>
+    /// <param name="password">User password</param>
+    /// <returns>Claims identity</returns>
     private async Task<ClaimsIdentity?> GetClaims(string login, string password)
     {
         var user = await _userManager.FindByNameAsync(login);
