@@ -15,5 +15,6 @@ public class ApplicationUserMapping :Profile
         CreateMap<ApplicationUser, ApplicationUserDto>().ReverseMap();
         CreateMap<ApplicationUser, ApplicationUserCreateDto>().ReverseMap();
         CreateMap<ApplicationUser, ApplicationUserUpdateDto>().ReverseMap();
+        CreateMap<ApplicationUser, RegistrationRequestDto>().ReverseMap();
     }
 }
