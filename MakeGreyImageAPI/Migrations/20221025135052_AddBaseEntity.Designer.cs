@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MakeGreyImageAPI.Migrations
 {
     [DbContext(typeof(DataDbContext))]
-    [Migration("20221025131057_Initial")]
-    partial class Initial
+    [Migration("20221025135052_AddBaseEntity")]
+    partial class AddBaseEntity
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -110,6 +110,12 @@ namespace MakeGreyImageAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Extension")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -123,6 +129,12 @@ namespace MakeGreyImageAPI.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("Updated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Width")
                         .HasColumnType("int");
@@ -142,10 +154,22 @@ namespace MakeGreyImageAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid>("InImageId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("OutImageId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("Updated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("UpdatedBy")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
