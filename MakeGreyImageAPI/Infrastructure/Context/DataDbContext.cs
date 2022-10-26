@@ -42,24 +42,7 @@ public sealed class DataDbContext : IdentityDbContext<ApplicationUser, IdentityR
     /// The task result contains the number of state entries written to the database</returns>
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
     {
-        foreach (var entry in ChangeTracker.Entries<BaseEntity>())
-        {
-            switch (entry.State)
-            {
-                case EntityState.Added:
-                    entry.Entity.Created = DateTime.UtcNow;
-                    var createUserId = _authenticatedService.GetUserId();
-                    if(Guid.Empty != createUserId)
-                        entry.Entity.CreatedBy = createUserId;
-                    break;
-                case EntityState.Modified:
-                    entry.Entity.Updated = DateTime.UtcNow;
-                    var updateUserId = _authenticatedService.GetUserId();
-                    if(Guid.Empty != updateUserId)
-                        entry.Entity.UpdatedBy = updateUserId;
-                    break;
-            }
-        }
+        UserAuditing();
         return base.SaveChangesAsync(cancellationToken);
     }
     /// <summary>
@@ -67,6 +50,14 @@ public sealed class DataDbContext : IdentityDbContext<ApplicationUser, IdentityR
     /// </summary>
     /// <returns>The number of state entries written to the database</returns>
     public override int SaveChanges()
+    {
+        UserAuditing();
+        return base.SaveChanges();
+    }
+    /// <summary>
+    /// Method for writing information about entity creating 
+    /// </summary>
+    private void UserAuditing()
     {
         foreach (var entry in ChangeTracker.Entries<BaseEntity>())
         {
@@ -86,6 +77,5 @@ public sealed class DataDbContext : IdentityDbContext<ApplicationUser, IdentityR
                     break;
             }
         }
-        return base.SaveChanges();
     }
 }
