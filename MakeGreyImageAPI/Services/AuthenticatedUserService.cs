@@ -3,15 +3,15 @@ using MakeGreyImageAPI.Interfaces;
 
 namespace MakeGreyImageAPI.Services;
 /// <summary>
-/// 
+/// A class with methods for authenticate the user
 /// </summary>
 public class AuthenticatedUserService : IAuthenticatedUserService
 {
     private readonly Guid _userId;
     /// <summary>
-    /// 
+    /// AuthenticatedUserService constructor
     /// </summary>
-    /// <param name="accessor"></param>
+    /// <param name="accessor">IHttpContextAccessor</param>
     public AuthenticatedUserService(IHttpContextAccessor accessor)
     {
         var id = accessor.HttpContext?.User.FindFirstValue("uid");
@@ -22,9 +22,9 @@ public class AuthenticatedUserService : IAuthenticatedUserService
         
     }
     /// <summary>
-    /// 
+    /// Getting the user account Id
     /// </summary>
-    /// <returns></returns>
+    /// <returns>User Id</returns>
     public Guid GetUserId()
     {
         return _userId;

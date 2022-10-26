@@ -1,6 +1,6 @@
 namespace MakeGreyImageAPI.DTOs;
 /// <summary>
-/// 
+/// Entity dto class with information about actions with the account
 /// </summary>
 public class BaseDto
 {
