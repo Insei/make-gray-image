@@ -13,7 +13,6 @@ using MakeGreyImageAPI.Middlewares;
 using MakeGreyImageAPI.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using ILogger = MakeGreyImageAPI.Interfaces.ILogger;
@@ -21,17 +20,17 @@ using ILogger = MakeGreyImageAPI.Interfaces.ILogger;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<DataDbContext>(options =>
-    options.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=ImageBase;Trusted_Connection=True;"), ServiceLifetime.Singleton);
+    options.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=ImageBase;Trusted_Connection=True;"), ServiceLifetime.Scoped);
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 builder.Services.AddIdentity<ApplicationUser, IdentityRole<Guid>>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<DataDbContext>();
 
-// We use asynchronous conversion which continues after the request is executed
-builder.Services.AddSingleton<IImageManager, ImageManager>();
-builder.Services.AddSingleton<IGenericRepository, GenericRepository>();
-builder.Services.AddSingleton<ImageService>();
-builder.Services.AddSingleton<LocalImageConvertTaskService>();
+builder.Services.AddScoped<IImageManager, ImageManager>();
+builder.Services.AddScoped<IGenericRepository, GenericRepository>();
+builder.Services.AddScoped<ImageService>();
+builder.Services.AddScoped<LocalImageConvertTaskService>();
 builder.Services.AddSingleton<ILogger, SerilogLogger>();
+
 builder.Services.AddScoped<ApplicationUserService>();
 builder.Services.AddScoped<ApplicationUserAdminService>();
 builder.Services.AddScoped<AuthService>();
@@ -154,7 +153,6 @@ app.UseStaticFiles();
 app.UseAuthentication();
 app.UseAuthorization();
 
-SeedDataDb.Initialize(app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope().ServiceProvider);
 app.MapControllers();
 app.UseMiddleware<ErrorHandlerMiddleware>();
 app.UseMiddleware<LoggerMiddleware>();

@@ -3,6 +3,7 @@ using MakeGreyImageAPI.DTOs;
 using MakeGreyImageAPI.DTOs.Results;
 using MakeGreyImageAPI.DTOs.Sorts;
 using MakeGreyImageAPI.Entities;
+using MakeGreyImageAPI.Infrastructure.Context;
 using MakeGreyImageAPI.Interfaces;
 
 namespace MakeGreyImageAPI.Services;
@@ -14,6 +15,8 @@ public class LocalImageConvertTaskService
     private IGenericRepository _repository;
     private IImageManager _manager;
     private IMapper _mapper;
+    private readonly IServiceProvider _scopeFactory;
+    private readonly IAuthenticatedUserService _authenticatedUserService;
     
     /// <summary>
     /// Constructor of LocalImageConvertTaskService
@@ -21,31 +24,44 @@ public class LocalImageConvertTaskService
     /// <param name="repository">IGenericRepository</param>
     /// <param name="manager">IImageManager</param>
     /// <param name="mapper">IMapper</param>
-    public LocalImageConvertTaskService(IGenericRepository repository, IImageManager manager, IMapper mapper)
+    /// <param name="scopeFactory"></param>
+    /// <param name="authenticatedUserService"></param>
+    public LocalImageConvertTaskService(IGenericRepository repository, IImageManager manager,
+        IMapper mapper, IServiceProvider scopeFactory, IAuthenticatedUserService authenticatedUserService)
     {
         _repository = repository;
         _manager = manager;
         _mapper = mapper;
+        _scopeFactory = scopeFactory;
+        _authenticatedUserService = authenticatedUserService;
     }
     
-    private async void ConvertImageCallback(Task<byte[]> imageTask, Guid taskId)
+    private async void ConvertImageCallback(Task<byte[]> imageTask, Guid taskId, Guid userId)
     {
-        var image = await imageTask;
-        var convertTask = await _repository.GetById<LocalImageConvertTask>(taskId);
-        var localOriginImage = await _repository.GetById<LocalImage>(convertTask!.InImageId);
-        var localGreyImage = new LocalImage()
+        // This callback use repository after main scope is disposed,
+        // so we need to create new scope
+        using (var scope = _scopeFactory.CreateScope())
         {
-            Name = "(Grey_Format)" + " " + localOriginImage!.Name,
-            Extension = localOriginImage.Extension,
-            Image = image,
-            Width = localOriginImage.Width,
-            Height = localOriginImage.Height
-        };
-        var newGreyImage = await _repository.Insert(localGreyImage);
+            var repo = scope.ServiceProvider.GetRequiredService<IGenericRepository>();
+            var image = await imageTask;
+            var convertTask = await repo.GetById<LocalImageConvertTask>(taskId);
+            var localOriginImage = await repo.GetById<LocalImage>(convertTask!.InImageId);
+            var localGreyImage = new LocalImage()
+            {
+                Name = "(Grey_Format)" + " " + localOriginImage!.Name,
+                Extension = localOriginImage.Extension,
+                Image = image,
+                Width = localOriginImage.Width,
+                Height = localOriginImage.Height,
+                CreatedBy = userId
+            };
+            var newGreyImage = await repo.Insert(localGreyImage);
         
-        convertTask!.OutImageId = newGreyImage.Id;
-        convertTask.ConvertStatus = "Success";
-        await _repository.Update(convertTask);
+            convertTask!.OutImageId = newGreyImage.Id;
+            convertTask.ConvertStatus = "Success";
+            convertTask.UpdatedBy = userId;
+            await repo.Update(convertTask);
+        }
     } 
     
     /// <summary>
@@ -55,8 +71,7 @@ public class LocalImageConvertTaskService
     /// <returns>LocalImageConvertTaskDTO</returns>
     public async Task<LocalImageConvertTaskDTO> Create(LocalImageConvertTaskCreateDTO convertImageCreate)
     {
-        var localImage = await _repository.GetById<LocalImage>(convertImageCreate.ImageId);
-        
+       var localImage = await _repository.GetById<LocalImage>(convertImageCreate.ImageId);
         var convertTask = new LocalImageConvertTask
         {
             InImageId = convertImageCreate.ImageId,
@@ -65,11 +80,15 @@ public class LocalImageConvertTaskService
         var newConvertTask = await _repository.Insert(convertTask);
         
         var greyImageTask = _manager.ConvertToGrey(localImage!);
-        var _ = greyImageTask.ContinueWith(greyImageTask => {ConvertImageCallback(greyImageTask, newConvertTask!.Id);});
+
+        var _ = greyImageTask.ContinueWith(greyImageTask =>
+        {
+            ConvertImageCallback(greyImageTask, newConvertTask!.Id, _authenticatedUserService.GetUserId());
+        });
         
         var result = _mapper.Map<LocalImageConvertTaskDTO>(newConvertTask);
-        result.Parameters!.Color = "Grey";
-        result.Parameters.Extension = localImage!.Extension;
+        // result.Parameters!.Color = "Grey";
+        // result.Parameters.Extension = localImage!.Extension;
         
         return result;
     }
