@@ -87,9 +87,6 @@ public class LocalImageConvertTaskService
         });
         
         var result = _mapper.Map<LocalImageConvertTaskDTO>(newConvertTask);
-        // result.Parameters!.Color = "Grey";
-        // result.Parameters.Extension = localImage!.Extension;
-        
         return result;
     }
     

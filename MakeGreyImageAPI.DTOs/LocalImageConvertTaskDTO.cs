@@ -13,10 +13,6 @@ public class LocalImageConvertTaskDTO : BaseDto
     /// </summary>
     public Guid? OutImageId { get; set; }
     /// <summary>
-    /// Image parameters(color, extension)
-    /// </summary>
-    public ConvertParameters? Parameters { get; set; }
-    /// <summary>
     /// Image conversion status
     /// </summary>
     public string Status { get; set; } = "";
