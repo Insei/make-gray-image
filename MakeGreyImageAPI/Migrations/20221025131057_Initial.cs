@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
-
+#pragma warning disable CS1591
 namespace MakeGreyImageAPI.Migrations
 {
     public partial class Initial : Migration
