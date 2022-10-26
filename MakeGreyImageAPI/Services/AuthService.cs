@@ -55,7 +55,8 @@ public class AuthService
         if (!result) return null;
         var claims = new List<Claim>
         {
-            new (ClaimsIdentity.DefaultNameClaimType, user.UserName)
+            new (ClaimsIdentity.DefaultNameClaimType, user.UserName),
+            new ("uid", user.Id.ToString())
         };
         return new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType, null);
     }
