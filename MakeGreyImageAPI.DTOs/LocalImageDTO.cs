@@ -1,11 +1,26 @@
 namespace MakeGreyImageAPI.DTOs;
 /// <summary>
-/// Entity of the dto image
+/// Base dto entity of the image
 /// </summary>
-public class LocalImageDTO : LocalImageBaseDTO
+public class LocalImageDTO : BaseDto
 {
     /// <summary>
-    /// Unique identifier of image
+    /// Image name
     /// </summary>
-    public Guid Id { get; set; }
+    public string Name { get; set; } = null!;
+    
+    /// <summary>
+    /// Image extension
+    /// </summary>
+    public string Extension { get; set; } = null!;
+    
+    /// <summary>
+    /// Image width
+    /// </summary>
+    public int Width { get; set; }
+    
+    /// <summary>
+    /// Image height
+    /// </summary>
+    public int Height { get; set; }
 }

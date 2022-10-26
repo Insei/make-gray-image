@@ -15,6 +15,6 @@ public class LocalImageMapping : Profile
     {
         CreateMap<LocalImageCreateDTO, LocalImage>().ReverseMap();
         CreateMap<LocalImage, LocalImageDTO>().ReverseMap();
-        CreateMap<LocalImageBaseDTO, LocalImage>().ReverseMap();
+        CreateMap<LocalImageDTO, LocalImage>().ReverseMap();
     }
 }

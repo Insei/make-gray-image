@@ -2,12 +2,8 @@ namespace MakeGreyImageAPI.DTOs;
 /// <summary>
 /// Entity dto of local image for converting task
 /// </summary>
-public class LocalImageConvertTaskDTO 
+public class LocalImageConvertTaskDTO : BaseDto
 {
-    /// <summary>
-    /// Unique identifier of LocalImageConvertTask entity
-    /// </summary>
-    public Guid Id { get; set; }
     /// <summary>
     /// Unique identifier of original image
     /// </summary>
