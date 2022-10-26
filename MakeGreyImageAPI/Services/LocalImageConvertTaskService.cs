@@ -62,8 +62,7 @@ public class LocalImageConvertTaskService
             convertTask.UpdatedBy = userId;
             await repo.Update(convertTask);
         }
-    } 
-    
+    }
     /// <summary>
     /// Creates a gray image
     /// </summary>
@@ -71,7 +70,7 @@ public class LocalImageConvertTaskService
     /// <returns>LocalImageConvertTaskDTO</returns>
     public async Task<LocalImageConvertTaskDTO> Create(LocalImageConvertTaskCreateDTO convertImageCreate)
     {
-       var localImage = await _repository.GetById<LocalImage>(convertImageCreate.ImageId);
+        var localImage = await _repository.GetById<LocalImage>(convertImageCreate.ImageId);
         var convertTask = new LocalImageConvertTask
         {
             InImageId = convertImageCreate.ImageId,
@@ -80,7 +79,6 @@ public class LocalImageConvertTaskService
         var newConvertTask = await _repository.Insert(convertTask);
         
         var greyImageTask = _manager.ConvertToGrey(localImage!);
-
         var _ = greyImageTask.ContinueWith(greyImageTask =>
         {
             ConvertImageCallback(greyImageTask, newConvertTask!.Id, _authenticatedUserService.GetUserId());
@@ -89,7 +87,6 @@ public class LocalImageConvertTaskService
         var result = _mapper.Map<LocalImageConvertTaskDTO>(newConvertTask);
         return result;
     }
-    
     /// <summary>
     /// Update LocalImageConvertTask entity
     /// </summary>
