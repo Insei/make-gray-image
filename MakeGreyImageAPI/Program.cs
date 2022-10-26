@@ -20,7 +20,7 @@ using ILogger = MakeGreyImageAPI.Interfaces.ILogger;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<DataDbContext>(options =>
-    options.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=ImageBase;Trusted_Connection=True;"), ServiceLifetime.Scoped);
+    options.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=ImageBase;Trusted_Connection=True;"));
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 builder.Services.AddIdentity<ApplicationUser, IdentityRole<Guid>>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<DataDbContext>();
