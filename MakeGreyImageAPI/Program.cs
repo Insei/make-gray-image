@@ -35,6 +35,7 @@ builder.Services.AddSingleton<ILogger, SerilogLogger>();
 builder.Services.AddScoped<ApplicationUserService>();
 builder.Services.AddScoped<ApplicationUserAdminService>();
 builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<IAuthenticatedUserService, AuthenticatedUserService>();
 
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddFluentValidationClientsideAdapters();
