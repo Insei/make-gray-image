@@ -17,9 +17,8 @@ public class AuthenticatedUserService : IAuthenticatedUserService
         var id = accessor.HttpContext?.User.FindFirstValue("uid");
         if (!string.IsNullOrEmpty(id))
         {
-           _userId = Guid.Parse(id);
+            _userId = Guid.Parse(id);
         }
-        
     }
     /// <summary>
     /// Getting the user account Id
