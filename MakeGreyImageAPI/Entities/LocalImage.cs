@@ -3,13 +3,8 @@ namespace MakeGreyImageAPI.Entities;
 /// <summary>
 /// Image entity
 /// </summary>
-public class LocalImage
+public class LocalImage : BaseEntity
 {
-    /// <summary>
-    /// Unique identifier of image
-    /// </summary>
-    public Guid Id { get; set; }
-
     /// <summary>
     /// Image name
     /// </summary>
@@ -34,5 +29,4 @@ public class LocalImage
     /// Image height
     /// </summary>
     public int Height { get; set; }
-    
 }
