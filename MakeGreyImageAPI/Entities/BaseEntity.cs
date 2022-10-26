@@ -1,6 +1,6 @@
 namespace MakeGreyImageAPI.Entities;
 /// <summary>
-/// 
+/// Entity class with information about actions with the account
 /// </summary>
 public class BaseEntity
 {

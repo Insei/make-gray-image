@@ -26,7 +26,7 @@ public class AuthOptions
     /// <summary>
     /// Method for getting symmetric security key
     /// </summary>
-    /// <returns></returns>
+    /// <returns>Symmetric security key</returns>
     public static SymmetricSecurityKey GetSymmetricSecurityKey()
     {
         return new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Key));
