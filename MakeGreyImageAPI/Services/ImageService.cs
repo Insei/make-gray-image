@@ -34,10 +34,10 @@ public class ImageService
     /// <param name="objFile">The image received from the request</param>
     /// <returns>DTO of image</returns>
     [System.Runtime.Versioning.SupportedOSPlatform("windows")]
-    public async Task <LocalImageDTO> Create(IFormFile objFile)
+    public async Task <LocalImageDto> Create(IFormFile objFile)
     {
         
-        if (objFile.Length == 0) return new LocalImageDTO();
+        if (objFile.Length == 0) return new LocalImageDto();
         var systemImage = ConvertToSystemImageFormat(objFile);
         var uploadImage = new LocalImage
         {
@@ -49,7 +49,7 @@ public class ImageService
         };
         systemImage.Dispose();
         var returningImage = await _repository.Insert(uploadImage);
-        return _mapper.Map<LocalImageDTO>(returningImage);
+        return _mapper.Map<LocalImageDto>(returningImage);
     }
 
     /// <summary>
@@ -57,10 +57,10 @@ public class ImageService
     /// </summary>
     /// <param name="id">Entity ID</param>
     /// <returns>DTO of image</returns>
-    public async Task<LocalImageDTO?> GetById(Guid id)
+    public async Task<LocalImageDto?> GetById(Guid id)
     {
         var image =  await _repository.GetById<LocalImage>(id);
-        var imageDto = _mapper.Map<LocalImageDTO>(image);
+        var imageDto = _mapper.Map<LocalImageDto>(image);
         return imageDto;
     }
     /// <summary>
@@ -82,7 +82,7 @@ public class ImageService
     /// <param name="orderDirection">Sorting direction</param>
     /// <param name="search">Search string</param>
     /// <returns>Paginated list of entities</returns>
-    public async Task<PaginatedResult<List<LocalImageDTO>>> GetPaginatedList(int pageNumber = 0, int pageSize = 0,
+    public async Task<PaginatedResult<List<LocalImageDto>>> GetPaginatedList(int pageNumber = 0, int pageSize = 0,
         string orderBy = "", SortDirection orderDirection = SortDirection.Asc, string search = "")
     {
         var count = await _repository.Count<LocalImage>(search);
@@ -90,10 +90,10 @@ public class ImageService
         var entities = await _repository.GetPaginatedList<LocalImage>(search, orderBy, orderDirection, 
             pagination.CurrentPage, pagination.PageSize);
         
-        var result = new PaginatedResult<List<LocalImageDTO>>
+        var result = new PaginatedResult<List<LocalImageDto>>
         {
             Pagination = pagination,
-            Data = _mapper.Map<List<LocalImageDTO>>(entities)
+            Data = _mapper.Map<List<LocalImageDto>>(entities)
         };
         return result;
     }

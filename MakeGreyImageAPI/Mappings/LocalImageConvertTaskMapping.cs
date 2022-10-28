@@ -13,7 +13,7 @@ public class LocalImageConvertTaskMapping : Profile
     /// </summary>
     public LocalImageConvertTaskMapping()
     {
-        CreateMap<LocalImageConvertTask, LocalImageConvertTaskDTO>().ReverseMap();
-        CreateMap<LocalImageConvertTask, LocalImageConvertTaskCreateDTO>().ReverseMap();
+        CreateMap<LocalImageConvertTask, LocalImageConvertTaskDto>().ReverseMap();
+        CreateMap<LocalImageConvertTask, LocalImageConvertTaskCreateDto>().ReverseMap();
     }
 }

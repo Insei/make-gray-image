@@ -68,7 +68,7 @@ public class LocalImageConvertTaskService
     /// </summary>
     /// <param name="convertImageCreate">Entity task</param>
     /// <returns>LocalImageConvertTaskDTO</returns>
-    public async Task<LocalImageConvertTaskDTO> Create(LocalImageConvertTaskCreateDTO convertImageCreate)
+    public async Task<LocalImageConvertTaskDto> Create(LocalImageConvertTaskCreateDto convertImageCreate)
     {
         var localImage = await _repository.GetById<LocalImage>(convertImageCreate.ImageId);
         var convertTask = new LocalImageConvertTask
@@ -84,7 +84,7 @@ public class LocalImageConvertTaskService
             ConvertImageCallback(greyImageTask, newConvertTask!.Id, _authenticatedUserService.GetUserId());
         });
         
-        var result = _mapper.Map<LocalImageConvertTaskDTO>(newConvertTask);
+        var result = _mapper.Map<LocalImageConvertTaskDto>(newConvertTask);
         return result;
     }
     /// <summary>
@@ -93,12 +93,12 @@ public class LocalImageConvertTaskService
     /// <param name="updateLocalImageConvert">New entity for updating</param>
     /// <param name="id">Entity ID</param>
     /// <returns>LocalImageConvertTaskDTO</returns>
-    public async Task<LocalImageConvertTaskDTO> Update(LocalImageConvertTaskDTO updateLocalImageConvert, Guid id)
+    public async Task<LocalImageConvertTaskDto> Update(LocalImageConvertTaskDto updateLocalImageConvert, Guid id)
     {
         var imageConvertTask = await _repository.GetById<LocalImageConvertTask>(id);
         _mapper.Map(updateLocalImageConvert, imageConvertTask); 
         await _repository.Update(imageConvertTask!);
-        return await _mapper.Map<Task<LocalImageConvertTaskDTO>>(imageConvertTask);
+        return await _mapper.Map<Task<LocalImageConvertTaskDto>>(imageConvertTask);
     }
     
     /// <summary>
@@ -125,11 +125,11 @@ public class LocalImageConvertTaskService
     /// </summary>
     /// <param name="id">Entity ID</param>
     /// <returns>LocalImageConvertTaskDTO</returns>
-    public async Task<LocalImageConvertTaskDTO?> GetById(Guid id)
+    public async Task<LocalImageConvertTaskDto?> GetById(Guid id)
     {
         var imageConvertTask =  await _repository.GetById<LocalImageConvertTask>(id);
         if (imageConvertTask == null) return null;
-        var imageDto = _mapper.Map<LocalImageConvertTaskDTO>(imageConvertTask);
+        var imageDto = _mapper.Map<LocalImageConvertTaskDto>(imageConvertTask);
         return imageDto;
     }
     /// <summary>
@@ -141,17 +141,17 @@ public class LocalImageConvertTaskService
     /// <param name="orderDirection">Sorting direction</param>
     /// <param name="search">Search string</param>
     /// <returns>Paginated list of entities</returns>
-    public async Task<PaginatedResult<List<LocalImageConvertTaskDTO>>> GetPaginatedList(int pageNumber = 0, int pageSize = 0,
+    public async Task<PaginatedResult<List<LocalImageConvertTaskDto>>> GetPaginatedList(int pageNumber = 0, int pageSize = 0,
         string orderBy = "", SortDirection orderDirection = SortDirection.Asc, string search = "")
     {
         var pagination = Pagination.Generate(pageNumber,pageSize, await _repository.Count<LocalImageConvertTask>(search));
         var entities = await _repository.GetPaginatedList<LocalImageConvertTask>(search, orderBy, orderDirection, 
             pagination.CurrentPage, pagination.PageSize);
         
-        var result = new PaginatedResult<List<LocalImageConvertTaskDTO>>
+        var result = new PaginatedResult<List<LocalImageConvertTaskDto>>
         {
             Pagination = pagination,
-            Data = _mapper.Map<List<LocalImageConvertTaskDTO>>(entities)
+            Data = _mapper.Map<List<LocalImageConvertTaskDto>>(entities)
         };
         return result;
     }

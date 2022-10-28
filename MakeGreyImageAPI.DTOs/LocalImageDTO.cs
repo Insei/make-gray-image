@@ -2,7 +2,7 @@ namespace MakeGreyImageAPI.DTOs;
 /// <summary>
 /// Base dto entity of the image
 /// </summary>
-public class LocalImageDTO : BaseDto
+public class LocalImageDto : BaseDto
 {
     /// <summary>
     /// Image name
