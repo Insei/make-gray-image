@@ -13,13 +13,17 @@ public class AuthService
 {
    
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly AuthOptions _authOptions;
+
     /// <summary>
     /// AuthService constructor
     /// </summary>
     /// <param name="userManager">UserManager</param>
-    public AuthService(UserManager<ApplicationUser> userManager)
+    /// <param name="authOptions">IConfiguration</param>
+    public AuthService(UserManager<ApplicationUser> userManager, AuthOptions authOptions)
     {
         _userManager = userManager;
+        _authOptions = authOptions;
     }
     /// <summary>
     /// Method for getting JWT token
@@ -31,13 +35,14 @@ public class AuthService
         var claim = await GetClaims(login, password);
         if (claim == null) return null;
         var now = DateTime.UtcNow;
+        var lifeTime = Convert.ToDouble(_authOptions.Lifetime); 
         var jwt = new JwtSecurityToken(
-            AuthOptions.Issuer,
-            AuthOptions.Audience,
+            _authOptions.Issuer,
+            _authOptions.Audience,
             notBefore: now,
             claims: claim.Claims,
-            expires: now.Add(TimeSpan.FromMinutes(AuthOptions.Lifetime)),
-            signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
+            expires: now.AddMinutes(lifeTime),
+            signingCredentials: new SigningCredentials(_authOptions.GetSymmetricSecurityKey(_authOptions.Key), SecurityAlgorithms.HmacSha256));
         return new JwtSecurityTokenHandler().WriteToken(jwt);
     }
 

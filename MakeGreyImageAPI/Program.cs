@@ -18,13 +18,17 @@ using Microsoft.OpenApi.Models;
 using ILogger = MakeGreyImageAPI.Interfaces.ILogger;
 
 var builder = WebApplication.CreateBuilder(args);
+var configuration = new ConfigurationManager().AddJsonFile("appsettings.json").Build();
+var authOptions = configuration.GetSection("AuthOptions").Get<AuthOptions>();
+
 
 builder.Services.AddDbContext<DataDbContext>(options =>
-    options.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=ImageBase;Trusted_Connection=True;"));
+    options.UseSqlServer(configuration.GetConnectionString("DataDbContext")));
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 builder.Services.AddIdentity<ApplicationUser, IdentityRole<Guid>>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<DataDbContext>();
 
+builder.Services.AddSingleton(authOptions);
 builder.Services.AddScoped<IImageManager, ImageManager>();
 builder.Services.AddScoped<IGenericRepository, GenericRepository>();
 builder.Services.AddScoped<ImageService>();
@@ -66,11 +70,11 @@ builder.Services.AddAuthentication(option =>
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
-            ValidIssuer = AuthOptions.Issuer,
+            ValidIssuer = authOptions.Issuer,
             ValidateAudience = true,
-            ValidAudience = AuthOptions.Audience,
+            ValidAudience = authOptions.Audience,
             ValidateLifetime = true,
-            IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
+            IssuerSigningKey = authOptions.GetSymmetricSecurityKey(authOptions.Key),
             ValidateIssuerSigningKey = true,
         };
     });
