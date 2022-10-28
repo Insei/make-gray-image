@@ -11,7 +11,6 @@ namespace MakeGreyImageAPI.Services;
 /// </summary>
 public class AuthService
 {
-   
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly AuthOptions _authOptions;
 

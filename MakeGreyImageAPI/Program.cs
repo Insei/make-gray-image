@@ -21,7 +21,6 @@ var builder = WebApplication.CreateBuilder(args);
 var configuration = new ConfigurationManager().AddJsonFile("appsettings.json").Build();
 var authOptions = configuration.GetSection("AuthOptions").Get<AuthOptions>();
 
-
 builder.Services.AddDbContext<DataDbContext>(options =>
     options.UseSqlServer(configuration.GetConnectionString("DataDbContext")));
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
