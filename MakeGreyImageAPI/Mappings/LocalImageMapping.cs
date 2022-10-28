@@ -13,8 +13,8 @@ public class LocalImageMapping : Profile
     /// </summary>
     public LocalImageMapping()
     {
-        CreateMap<LocalImageCreateDTO, LocalImage>().ReverseMap();
-        CreateMap<LocalImage, LocalImageDTO>().ReverseMap();
-        CreateMap<LocalImageDTO, LocalImage>().ReverseMap();
+        CreateMap<LocalImageCreateDto, LocalImage>().ReverseMap();
+        CreateMap<LocalImage, LocalImageDto>().ReverseMap();
+        CreateMap<LocalImageDto, LocalImage>().ReverseMap();
     }
 }

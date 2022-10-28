@@ -7,7 +7,7 @@ namespace MakeGreyImageAPI.Validators;
 /// <summary>
 /// Validation for LocalImageConvertTaskCreateDTO
 /// </summary>
-public class CreateImageConvertTaskValidator : AbstractValidator<LocalImageConvertTaskCreateDTO>
+public class CreateImageConvertTaskValidator : AbstractValidator<LocalImageConvertTaskCreateDto>
 {
     private readonly IGenericRepository _repository;
     /// <summary>

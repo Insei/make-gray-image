@@ -36,7 +36,7 @@ public class LocalImageConvertTaskController : Controller
     /// <response code="200">Returns the newly created item</response>
     /// <response code="400">If the item is null</response>
     [HttpPost]
-    public async Task<ActionResult<LocalImageConvertTaskDTO>> Add([FromBody] LocalImageConvertTaskCreateDTO? imageConvertTask)
+    public async Task<ActionResult<LocalImageConvertTaskDto>> Add([FromBody] LocalImageConvertTaskCreateDto? imageConvertTask)
     {
         if (imageConvertTask == null) return BadRequest();
         return Ok(await _imageConvertService.Create(imageConvertTask));
@@ -74,7 +74,7 @@ public class LocalImageConvertTaskController : Controller
     /// <param name="search">Search string parameter</param>
     /// <returns>PaginatedResult list of LocalImageConvertTaskDTO entities</returns>
     [HttpGet("list")]
-    public async Task<PaginatedResult<List<LocalImageConvertTaskDTO>>> GetList([FromQuery] int pageNumber = 0, 
+    public async Task<PaginatedResult<List<LocalImageConvertTaskDto>>> GetList([FromQuery] int pageNumber = 0, 
         int pageSize = 0, string? orderBy = "", string? orderDirection = "asc", string? search = "")
     {
         var directionEnum = SortDirection.Asc;
