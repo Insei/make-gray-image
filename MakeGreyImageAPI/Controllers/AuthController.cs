@@ -1,8 +1,5 @@
 using MakeGreyImageAPI.DTOs;
-using MakeGreyImageAPI.Entities;
-using MakeGreyImageAPI.Models;
 using MakeGreyImageAPI.Services;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MakeGreyImageAPI.Controllers;

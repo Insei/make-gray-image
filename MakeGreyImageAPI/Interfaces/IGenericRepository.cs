@@ -6,33 +6,32 @@ namespace MakeGreyImageAPI.Interfaces;
 /// <summary>
 /// Interface for generic repository
 /// </summary>
-public interface IGenericRepository
+/// <typeparam name="TKey">Type of special entity key</typeparam>
+/// <typeparam name="TEntity">Type of entity</typeparam>
+public interface IGenericRepository<in TKey, TEntity> where TEntity : IKeyEntity<TKey> where TKey :  IComparable, IComparable<TKey>, IEquatable<TKey>
 {
     /// <summary>
     /// Add new entity
     /// </summary>
     /// <param name="entity">Entity for adding</param>
-    public Task<TEntity> Insert<TEntity>(TEntity entity) where TEntity : class;
-
+    public Task<TEntity> Insert(TEntity entity);
     /// <summary>
     /// Get entity by ID
     /// </summary>
     /// <param name="id">Entity ID</param>
     /// <returns>Entity</returns>
-    public Task<TEntity?> GetById<TEntity>(Guid id) where TEntity : class;
-    
+    public Task<TEntity?> GetById(TKey id);
     /// <summary>
-    /// Delete entity
+    /// Delete Entity
     /// </summary>
-    /// <param name="entity">Entity for deleting</param>
-    public void Delete<TEntity>(TEntity entity) where TEntity : class;
-
+    /// <param name="id">Entity ID</param>
+    public void Delete(TKey id);
     /// <summary>
     /// Changes the accepted entity
     /// </summary>
     /// <param name="entity">New entity for updating</param>
     /// <returns>Updated entity</returns>
-    public Task<TEntity> Update<TEntity>(TEntity entity) where TEntity : class;
+    public Task<TEntity> Update(TEntity entity);
     /// <summary>
     /// Get entity list
     /// </summary>
@@ -41,12 +40,11 @@ public interface IGenericRepository
     /// <param name="includes">Includes</param>
     /// <param name="page">Current page</param>
     /// <param name="pageSize">Page size</param>
-    /// <typeparam name="TEntity">Entity type</typeparam>
     /// <returns>List of entities</returns>
-    public Task<IEnumerable<TEntity>> GetPaginatedList<TEntity>(Expression<Func<TEntity, bool>>? expression = null,
+    public Task<IEnumerable<TEntity>> GetList(Expression<Func<TEntity, bool>>? expression = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
         Func<IQueryable<TEntity>, IQueryable<TEntity>>? includes = null, int page = 0,
-        int pageSize = 0) where TEntity : class;
+        int pageSize = 0);
     /// <summary>
     /// Get Entity List (search in all fields)
     /// </summary>
@@ -55,25 +53,21 @@ public interface IGenericRepository
     /// <param name="orderDirection">Sorting direction</param>
     /// <param name="page">Current page</param>
     /// <param name="pageSize">Page size</param>
-    /// <typeparam name="TEntity">Entity type</typeparam>
     /// <returns>List of entities</returns>
-    public Task<IEnumerable<TEntity>> GetPaginatedList<TEntity>(string search = "", string orderBy = "",
+    public Task<IEnumerable<TEntity>> GetList(string search = "", string orderBy = "",
         SortDirection orderDirection = SortDirection.Asc,
-        int page = 0, int pageSize = 0) where TEntity : class;
+        int page = 0, int pageSize = 0);
     /// <summary>
     /// Count Elements with specified filter
     /// </summary>
     /// <param name="expression">Filter</param>
-    /// <typeparam name="TEntity">Entity type</typeparam>
     /// <returns>Number of entities</returns>
-    public Task<int> Count<TEntity>(Expression<Func<TEntity, bool>>? expression = null) where TEntity : class;
+    public Task<int> Count(Expression<Func<TEntity, bool>>? expression = null);
 
     /// <summary>
     /// Count Elements with search string (search in all fields)
     /// </summary>
     /// <param name="search">Search string</param>
-    /// <typeparam name="TEntity">Entity type</typeparam>
     /// <returns>Number of entities</returns>
-    public Task<int> Count<TEntity>(string search)
-        where TEntity : class;
+    public Task<int> Count(string search);
 }

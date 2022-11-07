@@ -1,4 +1,3 @@
-using MakeGreyImageAPI.DTOs;
 using MakeGreyImageAPI.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -6,7 +5,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 namespace MakeGreyImageAPI.Infrastructure.Context;
 
 using Microsoft.EntityFrameworkCore;
-using MakeGreyImageAPI.Entities;
+using Entities;
 
 /// <summary>
 /// Derived class from dbcontext for working with data
@@ -24,7 +23,7 @@ public sealed class DataDbContext : IdentityDbContext<ApplicationUser, IdentityR
     {
         _authenticatedService = authenticatedService;
     }
-
+    
     /// <summary>
     /// A data set through which we can interact with tables from the database
     /// </summary>
@@ -43,6 +42,7 @@ public sealed class DataDbContext : IdentityDbContext<ApplicationUser, IdentityR
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
     {
         UserAuditing();
+        DateTracking();
         return base.SaveChangesAsync(cancellationToken);
     }
     /// <summary>
@@ -52,28 +52,45 @@ public sealed class DataDbContext : IdentityDbContext<ApplicationUser, IdentityR
     public override int SaveChanges()
     {
         UserAuditing();
+        DateTracking();
         return base.SaveChanges();
     }
     /// <summary>
-    /// Method for writing information about entity creating 
+    /// Method for auditing operations performed with the user account
     /// </summary>
-    private void UserAuditing()
+    private void UserAuditing() 
     {
-        foreach (var entry in ChangeTracker.Entries<BaseEntity>())
+        foreach (var entry in ChangeTracker.Entries<IUserTrackedEntity<Guid>>())
         {
             switch (entry.State)
             {
                 case EntityState.Added:
-                    entry.Entity.Created = DateTime.UtcNow;
                     var createUserId = _authenticatedService.GetUserId();
                     if(Guid.Empty != createUserId)
                         entry.Entity.CreatedBy = createUserId;
                     break;
                 case EntityState.Modified:
-                    entry.Entity.Updated = DateTime.UtcNow;
                     var updateUserId = _authenticatedService.GetUserId();
                     if(Guid.Empty != updateUserId)
                         entry.Entity.UpdatedBy = updateUserId;
+                    break;
+            }
+        }
+    }
+    /// <summary>
+    /// Method for setting the desired date format
+    /// </summary>
+    private void DateTracking()
+    {
+        foreach (var entry in ChangeTracker.Entries<ITimeTrackedEntity>())
+        {
+            switch (entry.State)
+            {
+                case EntityState.Added:
+                    entry.Entity.Created = DateTime.UtcNow;
+                    break;
+                case EntityState.Modified:
+                    entry.Entity.Updated = DateTime.UtcNow;
                     break;
             }
         }

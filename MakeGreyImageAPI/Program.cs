@@ -1,6 +1,5 @@
 using System.Reflection;
 using MakeGreyImageAPI.Infrastructure.Context;
-using MakeGreyImageAPI.Infrastructure.Generics;
 using MakeGreyImageAPI.Interfaces;
 using MakeGreyImageAPI.Managers;
 using MakeGreyImageAPI.Services;
@@ -15,6 +14,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using MakeGreyImageAPI.Infrastructure.Generics;
 using ILogger = MakeGreyImageAPI.Interfaces.ILogger;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,7 +29,9 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole<Guid>>(options => opt
 
 builder.Services.AddSingleton(authOptions);
 builder.Services.AddScoped<IImageManager, ImageManager>();
-builder.Services.AddScoped<IGenericRepository, GenericRepository>();
+builder.Services.AddScoped<IGenericRepository<Guid, LocalImage>, GenericRepository<Guid, LocalImage>>();
+builder.Services.AddScoped<IGenericRepository<Guid, LocalImageConvertTask>, GenericRepository<Guid, LocalImageConvertTask>>();
+builder.Services.AddScoped<IGenericRepository<Guid, ApplicationUser>, GenericRepository<Guid, ApplicationUser>>();
 builder.Services.AddScoped<ImageService>();
 builder.Services.AddScoped<LocalImageConvertTaskService>();
 builder.Services.AddSingleton<ILogger, SerilogLogger>();

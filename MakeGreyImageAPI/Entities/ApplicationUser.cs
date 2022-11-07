@@ -1,10 +1,11 @@
+using MakeGreyImageAPI.Interfaces;
 using Microsoft.AspNetCore.Identity;
 
 namespace MakeGreyImageAPI.Entities;
 /// <summary>
 /// Entity with information about user
 /// </summary>
-public class ApplicationUser : IdentityUser<Guid>
+public class ApplicationUser : IdentityUser<Guid>, IKeyEntity<Guid>, ICreatedAtTrackedEntity
 {
     /// <summary>
     /// User name

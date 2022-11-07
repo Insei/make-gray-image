@@ -1,7 +1,6 @@
 using MakeGreyImageAPI.DTOs;
 using MakeGreyImageAPI.DTOs.Results;
 using MakeGreyImageAPI.DTOs.Sorts;
-using MakeGreyImageAPI.Interfaces;
 using MakeGreyImageAPI.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

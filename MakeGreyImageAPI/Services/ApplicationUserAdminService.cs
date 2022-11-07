@@ -11,18 +11,18 @@ namespace MakeGreyImageAPI.Services;
 /// </summary>
 public class ApplicationUserAdminService
 {
-    private readonly IGenericRepository _repository;
+    private readonly IGenericRepository<Guid, ApplicationUser> _applicationUserRepository;
     private readonly IMapper _mapper;
     
    /// <summary>
    /// Constructor of ApplicationUserService class
    /// </summary>
    /// <param name="mapper">IMapper</param>
-   /// <param name="repository">IGenericRepository</param>
-    public ApplicationUserAdminService(IMapper mapper, IGenericRepository repository)
+   /// <param name="applicationUserRepository"></param>
+    public ApplicationUserAdminService(IMapper mapper, IGenericRepository<Guid, ApplicationUser> applicationUserRepository)
     {
         _mapper = mapper;
-        _repository = repository;
+        _applicationUserRepository = applicationUserRepository;
     }
     /// <summary>
     /// Create a new entity of user
@@ -36,7 +36,7 @@ public class ApplicationUserAdminService
         data = new System.Security.Cryptography.HMACSHA256().ComputeHash(data);
         var hash = System.Text.Encoding.ASCII.GetString(data);
         appUser.PasswordHash = hash;
-        var result = await _repository.Insert(appUser);
+        var result = await _applicationUserRepository.Insert(appUser);
         return _mapper.Map<ApplicationUserDto>(result);
     }
     /// <summary>
@@ -47,10 +47,10 @@ public class ApplicationUserAdminService
     /// <returns>ApplicationUserDto</returns>
     public async Task<ApplicationUserDto?> Update(ApplicationUserUpdateDto updateDto, Guid id)
     {
-        var user = await _repository.GetById<ApplicationUser>(id);
+        var user = await _applicationUserRepository.GetById(id);
         if (user == null) return null;
         var updatedUser = _mapper.Map(updateDto, user);
-        var result = await _repository.Update(updatedUser);
+        var result = await _applicationUserRepository.Update(updatedUser);
         return _mapper.Map<ApplicationUserDto>(result);
     }
     /// <summary>
@@ -59,8 +59,8 @@ public class ApplicationUserAdminService
     /// <param name="id">Entity Id</param>
     public async Task Delete(Guid id)
     {
-        var user = await _repository.GetById<ApplicationUser>(id);
-        if(user != null) _repository.Delete(user);
+        var user = await _applicationUserRepository.GetById(id);
+        if(user != null) _applicationUserRepository.Delete(id);
     }
     /// <summary>
     /// Get DTO Entity by ID
@@ -69,10 +69,9 @@ public class ApplicationUserAdminService
     /// <returns>ApplicationUserDto</returns>
     public async Task<ApplicationUserDto?> GetById(Guid id)
     {
-        var user = await _repository.GetById<ApplicationUser>(id);
+        var user = await _applicationUserRepository.GetById(id);
         return user == null ? null : _mapper.Map<ApplicationUserDto>(user);
     }
-
     /// <summary>
     /// Get paginated entity list
     /// </summary>
@@ -85,9 +84,9 @@ public class ApplicationUserAdminService
     public async Task<PaginatedResult<List<ApplicationUserDto>>> GetPaginatedList(int pageNumber = 0, int pageSize = 0,
         string orderBy = "", SortDirection orderDirection = SortDirection.Asc, string search = "")
     {
-        var count = await _repository.Count<ApplicationUser>();
+        var count = await _applicationUserRepository.Count();
         var pagination = Pagination.Generate(pageNumber,pageSize,count);
-        var entities = await _repository.GetPaginatedList<ApplicationUser>(search, orderBy, orderDirection, 
+        var entities = await _applicationUserRepository.GetList(search, orderBy, orderDirection, 
             pagination.CurrentPage, pagination.PageSize);
         
         var result = new PaginatedResult<List<ApplicationUserDto>>
@@ -97,6 +96,4 @@ public class ApplicationUserAdminService
         };
         return result;
     }
-    
-    
 }

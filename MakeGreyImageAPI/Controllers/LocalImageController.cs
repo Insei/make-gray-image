@@ -17,7 +17,7 @@ namespace MakeGreyImageAPI.Controllers;
 public class LocalImageController : Controller
 {
     private static ImageService _service = null!;
-
+    
     /// <summary>
     /// Constructor of class LocalImageController
     /// </summary>
@@ -26,7 +26,6 @@ public class LocalImageController : Controller
     {
         _service = service;
     }
-
     /// <summary>
     /// Http request to add data to DB
     /// </summary>
@@ -43,7 +42,6 @@ public class LocalImageController : Controller
         }
         return BadRequest();
     }
-    
     /// <summary>
     /// Http request to get an entity by Id
     /// </summary>
@@ -58,7 +56,6 @@ public class LocalImageController : Controller
         if (result != null) return Ok(result);
         return NotFound();
     }
-    
     /// <summary>
     /// Http request to remove an entity from DB
     /// </summary>
@@ -94,7 +91,6 @@ public class LocalImageController : Controller
         }
         return await _service.GetPaginatedList(pageNumber, pageSize, orderBy!, directionEnum, search!);
     }
-    
     /// <summary>
     /// Http request to download image
     /// </summary>
