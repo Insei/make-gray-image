@@ -13,21 +13,19 @@ namespace MakeGreyImageAPI.Services;
 /// </summary>
 public class ImageService
 {
-    
-    private readonly IGenericRepository _repository;
+    private readonly IGenericRepository<Guid, LocalImage> _repository;
     private readonly IMapper _mapper;
     /// <summary>
     /// Constructor of ImageService class
     /// </summary>
     /// <param name="repository">IGenericRepository</param>
     /// <param name="mapper">IMapper</param>
-    public ImageService(IGenericRepository repository, IMapper mapper)
+    public ImageService(IGenericRepository<Guid, LocalImage> repository, IMapper mapper)
     {
         _repository = repository;
         _mapper = mapper;
 
     }
-
     /// <summary>
     /// Create a new entity of image
     /// </summary>
@@ -51,7 +49,6 @@ public class ImageService
         var returningImage = await _repository.Insert(uploadImage);
         return _mapper.Map<LocalImageDto>(returningImage);
     }
-
     /// <summary>
     /// Get DTO Entity by ID
     /// </summary>
@@ -59,7 +56,7 @@ public class ImageService
     /// <returns>DTO of image</returns>
     public async Task<LocalImageDto?> GetById(Guid id)
     {
-        var image =  await _repository.GetById<LocalImage>(id);
+        var image =  await _repository.GetById(id);
         var imageDto = _mapper.Map<LocalImageDto>(image);
         return imageDto;
     }
@@ -69,10 +66,9 @@ public class ImageService
     /// <param name="id">Entity ID</param>
     public async Task Delete(Guid id)
     {
-        var image = await _repository.GetById<LocalImage>(id);
-        if(image != null) _repository.Delete(image); 
+        var image = await _repository.GetById(id);
+        if(image != null) _repository.Delete(id); 
     }
-
     /// <summary>
     /// Get paginated Entity List 
     /// </summary>
@@ -85,9 +81,9 @@ public class ImageService
     public async Task<PaginatedResult<List<LocalImageDto>>> GetPaginatedList(int pageNumber = 0, int pageSize = 0,
         string orderBy = "", SortDirection orderDirection = SortDirection.Asc, string search = "")
     {
-        var count = await _repository.Count<LocalImage>(search);
+        var count = await _repository.Count(search);
         var pagination = Pagination.Generate(pageNumber,pageSize,count);
-        var entities = await _repository.GetPaginatedList<LocalImage>(search, orderBy, orderDirection, 
+        var entities = await _repository.GetList(search, orderBy, orderDirection, 
             pagination.CurrentPage, pagination.PageSize);
         
         var result = new PaginatedResult<List<LocalImageDto>>
@@ -97,7 +93,6 @@ public class ImageService
         };
         return result;
     }
-
     /// <summary>
     /// Convert IFormFile format file to byte
     /// </summary>
@@ -134,7 +129,7 @@ public class ImageService
     /// <returns>Image in byte format</returns>
     public async Task<byte[]?> GetImageByte(Guid id)
     {
-        var image = await _repository.GetById<LocalImage>(id);
+        var image = await _repository.GetById(id);
         return image?.Image;
     }
 }

@@ -41,7 +41,6 @@ public class AuthOptions
     /// Token lifetime(in minutes)
     /// </summary>
     public int Lifetime { get; set; }
-    
     /// <summary>
     /// Method for getting symmetric security key
     /// </summary>

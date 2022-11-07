@@ -6,7 +6,7 @@ namespace MakeGreyImageAPI.Loggers;
 /// <summary>
 /// Class for logging with Serilog 
 /// </summary>
-public class SerilogLogger : MakeGreyImageAPI.Interfaces.ILogger
+public class SerilogLogger : Interfaces.ILogger
 {
     private Logger _logger;
     
@@ -20,7 +20,6 @@ public class SerilogLogger : MakeGreyImageAPI.Interfaces.ILogger
             .WriteTo.File("Logg.txt", rollingInterval: RollingInterval.Day, rollOnFileSizeLimit: true)
             .CreateLogger();
     }
-    
     /// <summary>
     /// Method for logging
     /// </summary>

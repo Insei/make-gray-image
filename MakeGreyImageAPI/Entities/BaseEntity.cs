@@ -18,22 +18,19 @@ public class KeyEntity<TKey> : IKeyEntity<TKey> where TKey :  IComparable, IComp
 /// <summary>
 /// Entity class with information about actions with the account
 /// </summary>
-public class BaseEntity<TKey> : IKeyEntity<TKey>, IUserTrackedEntity, ITimeTrackedEntity where TKey : IComparable, IComparable<TKey>, IEquatable<TKey>
+public class BaseEntity<TKey, TUserKey> : KeyEntity<TKey>, IUserTrackedEntity<TUserKey>, ITimeTrackedEntity where TKey : IComparable, IComparable<TKey>, IEquatable<TKey>
+    where TUserKey :  IComparable, IComparable<TUserKey>, IEquatable<TUserKey>
 {
-    /// <summary>
-    /// Id of the entity
-    /// </summary>
-#pragma warning disable CS8618
-    public TKey Id { get; set; }
-#pragma warning restore CS8618
     /// <summary>
     /// Create by user ID
     /// </summary>
-    public Guid CreatedBy { get; set; }
+#pragma warning disable CS8618
+    public TUserKey CreatedBy { get; set; }
     /// <summary>
     /// Last modified by user ID
     /// </summary>
-    public Guid? UpdatedBy { get; set; }
+    public TUserKey UpdatedBy { get; set; }
+#pragma warning restore CS8618
     /// <summary>
     /// Created at DateTime UTC
     /// </summary>

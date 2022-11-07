@@ -9,64 +9,66 @@ namespace MakeGreyImageAPI.Infrastructure.Generics;
 /// <summary>
 /// Generalized Repository class type 
 /// </summary>
-public class GenericRepository : IGenericRepository
+public class GenericRepository<TKey, TEntity> : IGenericRepository<TKey, TEntity> where TEntity : class, ICreatedAtTrackedEntity, IKeyEntity<TKey> where TKey :  IComparable, IComparable<TKey>, IEquatable<TKey>
 {
-    /// <summary>
-    /// Context of DB Context
-    /// </summary>
     private readonly DataDbContext _dbContext;
-
-    /// <summary>
-    /// Constructor of GenericRepository
-    /// </summary>
-    /// <param name="dbContext">Parameter of DataDbContext</param>
-    public GenericRepository(DataDbContext dbContext)
+    internal virtual IQueryable<TEntity> _reader
     {
-        _dbContext = dbContext;
-    }   
+        get => _writer.AsQueryable();
+    }
+    internal virtual DbSet<TEntity> _writer
+    {
+        get => _dbContext.Set<TEntity>();
+    }
+    /// <summary>
+    /// GenericRepository constructor
+    /// </summary>
+    /// <param name="context">DataDbContext</param>
+    public GenericRepository(DataDbContext context)
+    {
+        _dbContext = context;
+    }
     /// <summary>
     /// Add new Entity
     /// </summary>
-    /// <param name="entity">Entity for Add</param>
-    /// <typeparam name="TEntity">Entity type</typeparam>
+    /// <param name="entity">New entity for creating</param>
     /// <returns>Created Entity</returns>
-    public async Task<TEntity> Insert<TEntity>(TEntity entity) where TEntity : class
+    public async Task<TEntity> Insert(TEntity entity)
     {
-        _dbContext.Set<TEntity>().Add(entity!);
-        _dbContext.Entry(entity!).State = EntityState.Added;
+        _writer.Add(entity);
+        _dbContext.Entry(entity).State = EntityState.Added;
         await _dbContext.SaveChangesAsync();
-        return entity!;
+        return entity;
     }
     /// <summary>
     /// Get Entity by ID
     /// </summary>
     /// <param name="id">Entity ID</param>
-    /// <typeparam name="TEntity">Entity type</typeparam>
     /// <returns>Entity</returns>
-    public async Task<TEntity?> GetById<TEntity>(Guid id) where TEntity : class
+    public async Task<TEntity?> GetById(TKey id)
     {
-        var entity = await _dbContext.Set<TEntity>().FindAsync(id);
+        var entity = await _reader.FirstOrDefaultAsync(e => e.Id.Equals(id));
         return entity;
     }
     /// <summary>
     /// Delete Entity
     /// </summary>
-    /// <param name="entity">Deleting entity</param>
-    /// <typeparam name="TEntity">Entity type</typeparam>
-    public async void Delete<TEntity>(TEntity entity) where TEntity : class
+    /// <param name="id">Entity ID</param>
+    public async void Delete(TKey id)
     {
-        _dbContext.Set<TEntity>().Remove(entity); 
+        var entity = await GetById(id);
+        if (entity == null) return;
+        _writer.Remove(entity); 
         await _dbContext.SaveChangesAsync();
     }
     /// <summary>
     /// Updating entity
     /// </summary>
     /// <param name="entity">New entity for updating</param>
-    /// <typeparam name="TEntity">Entity type</typeparam>
     /// <returns>Updated entity</returns>
-    public async Task<TEntity> Update<TEntity>(TEntity entity) where TEntity : class
+    public async Task<TEntity> Update(TEntity entity)
     {
-        _dbContext.Set<TEntity>().Attach(entity);
+        _writer.Attach(entity);
         _dbContext.Entry(entity).State = EntityState.Modified;
         await _dbContext.SaveChangesAsync();
         return entity;
@@ -79,13 +81,12 @@ public class GenericRepository : IGenericRepository
     /// <param name="includes">Includes</param>
     /// <param name="page">Current page</param>
     /// <param name="pageSize">Page size</param>
-    /// <typeparam name="TEntity">Entity type</typeparam>
     /// <returns>List of entities</returns>
-    public async Task<IEnumerable<TEntity>> GetPaginatedList<TEntity>(Expression<Func<TEntity, bool>>? expression = null, 
+    public async Task<IEnumerable<TEntity>> GetList(Expression<Func<TEntity, bool>>? expression = null, 
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null, Func<IQueryable<TEntity>, 
-            IQueryable<TEntity>>? includes = null, int page = 0, int pageSize = 0) where TEntity : class
+            IQueryable<TEntity>>? includes = null, int page = 0, int pageSize = 0)
     {
-        IQueryable<TEntity> query = _dbContext.Set<TEntity>();
+        IQueryable<TEntity> query = _reader;
         if (expression != null)
             query = query.Where(expression);
         if (includes != null)
@@ -93,6 +94,8 @@ public class GenericRepository : IGenericRepository
         
         if (orderBy != null)
             query = orderBy(query);
+        else
+            query = query.OrderByDescending(e => e.Created);
 
         if (page > 0 && pageSize > 0)
             query = query.Skip(pageSize * (page - 1)).Take(pageSize);
@@ -107,10 +110,9 @@ public class GenericRepository : IGenericRepository
     /// <param name="orderDirection">Sorting direction</param>
     /// <param name="page">Current page</param>
     /// <param name="pageSize">Page size</param>
-    /// <typeparam name="TEntity">Entity type</typeparam>
     /// <returns>List of entities</returns>
-    public async Task<IEnumerable<TEntity>> GetPaginatedList<TEntity>(string search = "", string orderBy = "",
-        SortDirection orderDirection = SortDirection.Asc, int page = 0, int pageSize = 0) where TEntity : class
+    public async Task<IEnumerable<TEntity>> GetList(string search = "", string orderBy = "",
+        SortDirection orderDirection = SortDirection.Asc, int page = 0, int pageSize = 0)
     {
         var pageContext = page < 1 ? 0 : page;
         var pageSizeContext = pageSize < 1 ? 0 : pageSize;
@@ -132,34 +134,32 @@ public class GenericRepository : IGenericRepository
         { 
             entities = orderDirection switch
             {
-                SortDirection.Asc => await GetPaginatedList(filterExpression, c => c.OrderBy(orderExpression),null,
+                SortDirection.Asc => await GetList(filterExpression, c => c.OrderBy(orderExpression),null,
                     pageContext, pageSizeContext),
-                SortDirection.Desc => await GetPaginatedList(filterExpression, c => c.OrderByDescending(orderExpression),null,
+                SortDirection.Desc => await GetList(filterExpression, c => c.OrderByDescending(orderExpression),null,
                     pageContext, pageSizeContext),
                 _ => throw new ArgumentOutOfRangeException(nameof(orderDirection), orderDirection, null)
             };
         }
-        return entities ?? await GetPaginatedList(filterExpression, null, null, page, pageSize);
+        return entities ?? await GetList(filterExpression, query => query.OrderByDescending(e => e.Created), null, page, pageSize);
     }
     /// <summary>
     /// Count Elements with specified filter
     /// </summary>
     /// <param name="expression">Filter</param>
-    /// <typeparam name="TEntity">Entity type</typeparam>
     /// <returns>Number of entities</returns>
-    public async Task<int> Count<TEntity>(Expression<Func<TEntity, bool>>? expression = null) where TEntity : class
+    public async Task<int> Count(Expression<Func<TEntity, bool>>? expression = null)
     {
         if (expression != null)
-            return await _dbContext.Set<TEntity>().Where(expression).CountAsync();
-        return await _dbContext.Set<TEntity>().CountAsync();
+            return await _reader.Where(expression).CountAsync();
+        return await _reader.CountAsync();
     }
     /// <summary>
     /// Count Elements with search string (search in all fields)
     /// </summary>
     /// <param name="search">Search string</param>
-    /// <typeparam name="TEntity">Entity type</typeparam>
     /// <returns>Number of entities</returns>
-    public async Task<int> Count<TEntity>(string search) where TEntity : class
+    public async Task<int> Count(string search)
     {
         Expression<Func<TEntity, bool>>? filterExpression = null;
         

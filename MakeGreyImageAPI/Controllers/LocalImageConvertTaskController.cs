@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MakeGreyImageAPI.Controllers;
 
-
 /// <summary>
 /// Controller for working with converted images
 /// </summary>
@@ -18,7 +17,7 @@ namespace MakeGreyImageAPI.Controllers;
 public class LocalImageConvertTaskController : Controller
 {
     private readonly LocalImageConvertTaskService _imageConvertService;
-
+    
     /// <summary>
     /// Constructor of class LocalImageConvertTaskController
     /// </summary>
@@ -27,7 +26,6 @@ public class LocalImageConvertTaskController : Controller
     {
         _imageConvertService = imageConvertService;
     }
-
     /// <summary>
     /// Http request to add data to DB
     /// </summary>
@@ -52,7 +50,6 @@ public class LocalImageConvertTaskController : Controller
     {
         return Ok(await _imageConvertService.GetById(id));
     }
-    
     /// <summary>
     /// Http request to remove an entity from DB
     /// </summary>

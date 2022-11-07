@@ -1,8 +1,5 @@
-using System.Net;
 using System.Text;
 using Microsoft.AspNetCore.Http.Extensions;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
 namespace MakeGreyImageAPI.Middlewares;
 /// <summary>

@@ -44,7 +44,6 @@ public class AuthService
             signingCredentials: new SigningCredentials(_authOptions.GetSymmetricSecurityKey(_authOptions.Key), SecurityAlgorithms.HmacSha256));
         return new JwtSecurityTokenHandler().WriteToken(jwt);
     }
-
     /// <summary>
     /// Method for getting user claim for access
     /// </summary>
