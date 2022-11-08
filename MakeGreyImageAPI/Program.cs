@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MakeGreyImageAPI.Infrastructure.Generics;
+using MakeGreyImageAPI.Infrastructure.Repositories;
 using ILogger = MakeGreyImageAPI.Interfaces.ILogger;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,8 +30,8 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole<Guid>>(options => opt
 
 builder.Services.AddSingleton(authOptions);
 builder.Services.AddScoped<IImageManager, ImageManager>();
-builder.Services.AddScoped<IGenericRepository<Guid, LocalImage>, GenericRepository<Guid, LocalImage>>();
-builder.Services.AddScoped<IGenericRepository<Guid, LocalImageConvertTask>, GenericRepository<Guid, LocalImageConvertTask>>();
+builder.Services.AddScoped<IGenericRepository<Guid, LocalImage>, LocalImageRepository>();
+builder.Services.AddScoped<IGenericRepository<Guid, LocalImageConvertTask>,  LocalImageConvertTaskRepository>();
 builder.Services.AddScoped<IGenericRepository<Guid, ApplicationUser>, GenericRepository<Guid, ApplicationUser>>();
 builder.Services.AddScoped<ImageService>();
 builder.Services.AddScoped<LocalImageConvertTaskService>();
