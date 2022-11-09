@@ -86,10 +86,9 @@ public class ImageService
         var entities = await _repository.GetList(search, orderBy, orderDirection, 
             pagination.CurrentPage, pagination.PageSize);
         
-        var result = new PaginatedResult<List<LocalImageDto>>
+        var result = new PaginatedResult<List<LocalImageDto>>(_mapper.Map<List<LocalImageDto>>(entities))
         {
-            Pagination = pagination,
-            Data = _mapper.Map<List<LocalImageDto>>(entities)
+            Pagination = pagination
         };
         return result;
     }

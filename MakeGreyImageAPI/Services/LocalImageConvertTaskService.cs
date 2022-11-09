@@ -150,10 +150,9 @@ public class LocalImageConvertTaskService
         var entities = await _convertTaskRepository.GetList(search, orderBy, orderDirection, 
             pagination.CurrentPage, pagination.PageSize);
         
-        var result = new PaginatedResult<List<LocalImageConvertTaskDto>>
+        var result = new PaginatedResult<List<LocalImageConvertTaskDto>>(_mapper.Map<List<LocalImageConvertTaskDto>>(entities))
         {
-            Pagination = pagination,
-            Data = _mapper.Map<List<LocalImageConvertTaskDto>>(entities)
+            Pagination = pagination
         };
         return result;
     }

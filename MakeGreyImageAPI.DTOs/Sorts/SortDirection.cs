@@ -1,15 +1,17 @@
-namespace MakeGreyImageAPI.DTOs.Sorts;
-/// <summary>
-/// Sorting values
-/// </summary>
-public enum SortDirection
+namespace MakeGreyImageAPI.DTOs.Sorts
 {
     /// <summary>
-    /// Sort in descending order
+    /// Sorting values
     /// </summary>
-    Desc,
-    /// <summary>
-    /// Sort in ascending order
-    /// </summary>
-    Asc
+    public enum SortDirection
+    {
+        /// <summary>
+        /// Sort in descending order
+        /// </summary>
+        Desc,
+        /// <summary>
+        /// Sort in ascending order
+        /// </summary>
+        Asc
+    }
 }

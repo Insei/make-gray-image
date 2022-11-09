@@ -89,10 +89,9 @@ public class ApplicationUserAdminService
         var entities = await _applicationUserRepository.GetList(search, orderBy, orderDirection, 
             pagination.CurrentPage, pagination.PageSize);
         
-        var result = new PaginatedResult<List<ApplicationUserDto>>
+        var result = new PaginatedResult<List<ApplicationUserDto>>(_mapper.Map<List<ApplicationUserDto>>(entities))
         {
-            Pagination = pagination,
-            Data = _mapper.Map<List<ApplicationUserDto>>(entities)
+            Pagination = pagination
         };
         return result;
     }
